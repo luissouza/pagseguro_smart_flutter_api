@@ -15,14 +15,11 @@ class Payment {
   //TYPES
 
   Future<bool> creditPayment(int value) async {
-    return channel
-        .invokeMethod(PaymentTypeCall.CREDIT.method, {"value": value});
+    return channel.invokeMethod(PaymentTypeCall.CREDIT.method, {"value": value});
   }
 
-  Future<bool> creditPaymentParc(int value, int parc,
-      {PaymentTypeCredit type = PaymentTypeCredit.CLIENT}) async {
-    return channel.invokeMethod(PaymentTypeCall.CREDIT_PARC.method,
-        {"value": value, "parc": parc, "type": type.value});
+  Future<bool> creditPaymentParc(int value, int parc, {PaymentTypeCredit type = PaymentTypeCredit.CLIENT}) async {
+    return channel.invokeMethod(PaymentTypeCall.CREDIT_PARC.method, {"value": value, "parc": parc, "type": type.value});
   }
 
   Future<bool> debitPayment(int value) async {
@@ -30,8 +27,7 @@ class Payment {
   }
 
   Future<bool> voucherPayment(int value) async {
-    return channel
-        .invokeMethod(PaymentTypeCall.VOUCHER.method, {"value": value});
+    return channel.invokeMethod(PaymentTypeCall.VOUCHER.method, {"value": value});
   }
 
   //OPERATIONS
@@ -44,16 +40,27 @@ class Payment {
   }
 
   Future<bool> refund({String transactionCode, String transactionId}) async {
-    return channel.invokeMethod(PaymentTypeCall.REFUND.method,
-        {"transactionCode": transactionCode, "transactionId": transactionId});
+    return channel.invokeMethod(PaymentTypeCall.REFUND.method, {"transactionCode": transactionCode, "transactionId": transactionId});
   }
 
   Future<bool> readNfc() async {
     return channel.invokeMethod(PaymentTypeCall.READ_NFC.method);
   }
 
-  Future<bool> writeNfc(idCaixa, idCarga, nome, cpf, numeroTag, valorProdutosString, saldoAtual) async {
-    return channel.invokeMethod(PaymentTypeCall.WRITE_NFC.method, {"idCaixa": idCaixa, "idCarga": idCarga, "nome": nome, "cpf": cpf, "numeroTag": numeroTag, "valorProdutosString": valorProdutosString, "saldoAtual": saldoAtual});
+  Future<bool> writeNfc(idCaixa, idCarga, valorProdutosString, nome, cpf, numeroTag, saldoAtual, celular, ativo) async {
+    return channel.invokeMethod(PaymentTypeCall.WRITE_NFC.method, {"idCaixa": idCaixa, "idCarga": idCarga, "valorProdutosString": valorProdutosString, "nome": nome, "cpf": cpf, "numeroTag": numeroTag, "saldoAtual": saldoAtual, "celular": celular, "ativo": ativo});
+  }
+
+  Future<bool> reWriteNfc(saldoAtual, valor) async {
+    return channel.invokeMethod(PaymentTypeCall.REWRITE_NFC.method, {"saldoAtual": saldoAtual, "valor": valor});
+  }
+
+  Future<bool> formatNfc() async {
+    return channel.invokeMethod(PaymentTypeCall.FORMAT_NFC.method);
+  }
+
+  Future<bool> debitNfc(saldoAtual, valor) async {
+    return channel.invokeMethod(PaymentTypeCall.DEBIT_NFC.method, {"saldoAtual": saldoAtual, "valor": valor});
   }
 
   Future<dynamic> _callHandler(MethodCall call) async {
@@ -123,6 +130,24 @@ class Payment {
       case PaymentTypeHandler.SHOW_SUCCESS_WRITE:
         {
           paymentHandler.showSuccessWrite(call.arguments);
+        }
+        break;
+
+      case PaymentTypeHandler.SHOW_SUCCESS_RE_WRITE:
+        {
+          paymentHandler.showSuccessReWrite(call.arguments);
+        }
+        break;
+
+      case PaymentTypeHandler.SHOW_SUCCESS_DEBIT_NFC:
+        {
+          paymentHandler.showSuccessDebitNfc(call.arguments);
+        }
+        break;
+
+      case PaymentTypeHandler.SHOW_SUCCESS_FORMAT:
+        {
+          paymentHandler.showSuccessFormat(call.arguments);
         }
         break;
 

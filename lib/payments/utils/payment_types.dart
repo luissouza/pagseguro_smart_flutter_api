@@ -10,7 +10,10 @@ enum PaymentTypeHandler {
   ON_AUTH_PROGRESS,
   ON_TRANSACTION_INFO,
   SHOW_SUCCESS,
-  SHOW_SUCCESS_WRITE
+  SHOW_SUCCESS_WRITE,
+  SHOW_SUCCESS_RE_WRITE,
+  SHOW_SUCCESS_FORMAT,
+  SHOW_SUCCESS_DEBIT_NFC
 }
 
 extension StringPaymentHandlerExt on String {
@@ -40,7 +43,12 @@ extension StringPaymentHandlerExt on String {
         return PaymentTypeHandler.SHOW_SUCCESS;
       case "showSuccessWrite":
         return PaymentTypeHandler.SHOW_SUCCESS_WRITE;
-      
+      case "showSuccessReWrite":
+        return PaymentTypeHandler.SHOW_SUCCESS_RE_WRITE;
+      case "showSuccessFormat":
+        return PaymentTypeHandler.SHOW_SUCCESS_FORMAT;
+      case "showSuccessDebitNfc":
+        return PaymentTypeHandler.SHOW_SUCCESS_DEBIT_NFC;
       default:
         throw "NOT IMPLEMENTED";
     }
@@ -74,6 +82,12 @@ extension PaymentTypeHandlerExt on PaymentTypeHandler {
         return "showSuccess";
       case PaymentTypeHandler.SHOW_SUCCESS_WRITE:
         return "showSuccessWrite";
+      case PaymentTypeHandler.SHOW_SUCCESS_RE_WRITE:
+        return "showSuccessReWrite";
+      case PaymentTypeHandler.SHOW_SUCCESS_FORMAT:
+        return "showSuccessFormat";
+      case PaymentTypeHandler.SHOW_SUCCESS_DEBIT_NFC:
+        return "showSuccessDebitNfc";
     }
   }
 }
@@ -87,7 +101,10 @@ enum PaymentTypeCall {
   LAST_TRANSACTION,
   REFUND,
   READ_NFC,
-  WRITE_NFC
+  WRITE_NFC,
+  REWRITE_NFC,
+  DEBIT_NFC,
+  FORMAT_NFC
 }
 
 enum PaymentTypeCredit { SALESMAN, CLIENT }
@@ -124,6 +141,12 @@ extension PaymentTypeCallExt on PaymentTypeCall {
         return "paymentReadNfc";
       case PaymentTypeCall.WRITE_NFC:
         return "paymentWriteNfc";
+      case PaymentTypeCall.REWRITE_NFC:
+        return "paymentReWriteNfc";
+      case PaymentTypeCall.DEBIT_NFC:
+        return "paymentDebitNfc";
+      case PaymentTypeCall.FORMAT_NFC:
+        return "paymentFormatNfc";
     }
   }
 }

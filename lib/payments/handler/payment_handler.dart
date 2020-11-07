@@ -10,6 +10,12 @@ abstract class PaymentHandler {
 
   void showSuccessWrite(int result);
 
+  void showSuccessReWrite(int result);
+
+  void showSuccessFormat(int result);
+
+  void showSuccessDebitNfc(int result);
+
   void onLoading(bool show);
 
   void writeToFile({String transactionCode, String transactionId});
