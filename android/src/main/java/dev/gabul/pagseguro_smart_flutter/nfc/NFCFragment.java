@@ -19,6 +19,9 @@ public class NFCFragment implements NFCContract {
     private static final String ON_ERROR = "onError";
     private static final String ON_SUCCESS = "showSuccess";
     private static final String ON_SUCCESS_WRITE = "showSuccessWrite";
+    private static final String ON_SUCCESS_RE_WRITE = "showSuccessReWrite";
+    private static final String ON_SUCCESS_FORMAT = "showSuccessFormat";
+    private static final String ON_SUCCESS_DEBIT_NFC = "showSuccessDebitNfc";
     private static final String ON_READ_CARD = "onReadCard";
     private static final String ON_WRITE_CARD = "onWriteCard";
     private static final String ON_ABORT = "onAbort";
@@ -40,6 +43,21 @@ public class NFCFragment implements NFCContract {
     @Override
     public void showSuccessWrite(PlugPagNFCResult result) {
         this.channel.invokeMethod(ON_SUCCESS_WRITE, result.getResult());
+    }
+
+    @Override
+    public void showSuccessReWrite(PlugPagNFCResult result) {
+        this.channel.invokeMethod(ON_SUCCESS_RE_WRITE, result.getResult());
+    }
+
+    @Override
+    public void showSuccessFormat(PlugPagNFCResult result) {
+        this.channel.invokeMethod(ON_SUCCESS_FORMAT, result.getResult());
+    }
+
+    @Override
+    public void showSuccessDebitNfc(PlugPagNFCResult result) {
+        this.channel.invokeMethod(ON_SUCCESS_DEBIT_NFC, result.getResult());
     }
 
     @Override

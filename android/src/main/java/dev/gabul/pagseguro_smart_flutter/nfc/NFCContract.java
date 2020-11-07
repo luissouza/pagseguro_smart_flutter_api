@@ -9,6 +9,12 @@ import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPagNFCResult;
 
     void showSuccessWrite(PlugPagNFCResult result);
 
+    void showSuccessReWrite(PlugPagNFCResult result);
+
+    void showSuccessFormat(PlugPagNFCResult result);
+
+    void showSuccessDebitNfc(PlugPagNFCResult result);
+
     void showError(String message);
 
     void onReadCard();

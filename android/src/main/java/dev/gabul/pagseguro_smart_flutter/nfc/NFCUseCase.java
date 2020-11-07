@@ -24,6 +24,7 @@ public class NFCUseCase {
 
             PlugPagNFCResult result = mPlugPag.readFromNFCCard(cardData);
 
+
             if (result.getResult() == 1) {
                 emitter.onNext(result);
             } else {
