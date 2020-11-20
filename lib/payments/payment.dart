@@ -150,11 +150,6 @@ class Payment {
           paymentHandler.showSuccessFormat(call.arguments);
         }
         break;
-      case PaymentTypeHandler.SHOW_SUCCESS_WRITE_DIRECTLY:
-        {
-          paymentHandler.showSuccessWriteDirectly(call.arguments);
-        }
-        break;
 
       default:
         throw "METHOD NOT IMPLEMENTED";
