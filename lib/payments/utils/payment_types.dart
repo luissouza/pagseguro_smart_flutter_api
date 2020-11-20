@@ -13,8 +13,7 @@ enum PaymentTypeHandler {
   SHOW_SUCCESS_WRITE,
   SHOW_SUCCESS_RE_WRITE,
   SHOW_SUCCESS_FORMAT,
-  SHOW_SUCCESS_DEBIT_NFC,
-  SHOW_SUCCESS_WRITE_DIRECTLY,
+  SHOW_SUCCESS_DEBIT_NFC
 }
 
 extension StringPaymentHandlerExt on String {
@@ -49,9 +48,7 @@ extension StringPaymentHandlerExt on String {
       case "showSuccessFormat":
         return PaymentTypeHandler.SHOW_SUCCESS_FORMAT;
       case "showSuccessDebitNfc":
-        return PaymentTypeHandler.SHOW_SUCCESS_DEBIT_NFC;
-      case "showSuccessWriteDirectly":
-        return PaymentTypeHandler.SHOW_SUCCESS_WRITE_DIRECTLY;
+        return PaymentTypeHandler.SHOW_SUCCESS_DEBIT_NFC;  
       default:
         throw "NOT IMPLEMENTED";
     }
@@ -91,8 +88,6 @@ extension PaymentTypeHandlerExt on PaymentTypeHandler {
         return "showSuccessFormat";
       case PaymentTypeHandler.SHOW_SUCCESS_DEBIT_NFC:
         return "showSuccessDebitNfc";
-      case PaymentTypeHandler.SHOW_SUCCESS_WRITE_DIRECTLY:
-        return "showSuccessWriteDirectly";
     }
   }
 }
