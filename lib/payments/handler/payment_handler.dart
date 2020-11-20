@@ -10,6 +10,8 @@ abstract class PaymentHandler {
 
   void showSuccessWrite(int result);
 
+  void showSuccessWriteDirectly(int result);
+
   void showSuccessReWrite(int result);
 
   void showSuccessFormat(int result);

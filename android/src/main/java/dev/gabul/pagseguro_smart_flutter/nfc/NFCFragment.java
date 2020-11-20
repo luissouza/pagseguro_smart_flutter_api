@@ -19,6 +19,7 @@ public class NFCFragment implements NFCContract {
     private static final String ON_ERROR = "onError";
     private static final String ON_SUCCESS = "showSuccess";
     private static final String ON_SUCCESS_WRITE = "showSuccessWrite";
+    private static final String ON_SUCCESS_WRITE_DIRECTLY = "showSuccessWriteDirectly";
     private static final String ON_SUCCESS_RE_WRITE = "showSuccessReWrite";
     private static final String ON_SUCCESS_FORMAT = "showSuccessFormat";
     private static final String ON_SUCCESS_DEBIT_NFC = "showSuccessDebitNfc";
@@ -29,6 +30,7 @@ public class NFCFragment implements NFCContract {
 
     @Override
     public void showSuccess(PlugPagNFCResult result) {
+
         final List<String> results = new ArrayList<>();
         results.add(new String(result.getSlots()[1].get("data")));
         results.add(new String(result.getSlots()[2].get("data")));
@@ -36,13 +38,52 @@ public class NFCFragment implements NFCContract {
         results.add(new String(result.getSlots()[8].get("data")));
         results.add(new String(result.getSlots()[9].get("data")));
         results.add(new String(result.getSlots()[10].get("data")));
+        results.add(new String(result.getSlots()[11].get("data")));
+        results.add(new String(result.getSlots()[12].get("data")));
         results.add(String.valueOf(result.getResult()));
-        this.channel.invokeMethod(ON_SUCCESS, results);
+            this.channel.invokeMethod(ON_SUCCESS, results);
+    }
+
+
+
+    @Override
+    public void showSuccessStartDirectly(Object result) {
+        this.channel.invokeMethod(ON_SUCCESS_WRITE_DIRECTLY, result);
     }
 
     @Override
-    public void showSuccessWrite(PlugPagNFCResult result) {
-        this.channel.invokeMethod(ON_SUCCESS_WRITE, result.getResult());
+    public void showSuccessStopDirectly(Object result) {
+        this.channel.invokeMethod(ON_SUCCESS_WRITE_DIRECTLY, result);
+    }
+
+    @Override
+    public void showSuccessAuthDirectly(Object result) {
+        this.channel.invokeMethod(ON_SUCCESS_WRITE_DIRECTLY, result);
+    }
+
+    @Override
+    public void showSuccessWrite(int result) {
+        this.channel.invokeMethod(ON_SUCCESS_WRITE, result);
+    }
+
+    @Override
+    public void showSuccessWriteDirectly(Object result) {
+        this.channel.invokeMethod(ON_SUCCESS_WRITE_DIRECTLY, result);
+    }
+
+    @Override
+    public void showSuccessReadDirectly(Object result) {
+
+    }
+
+    @Override
+    public void showSuccessReWriteDirectly(Object result) {
+
+    }
+
+    @Override
+    public void showSuccessFormatDirectly(Object result) {
+
     }
 
     @Override

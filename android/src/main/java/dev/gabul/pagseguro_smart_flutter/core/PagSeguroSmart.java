@@ -29,11 +29,18 @@ public class PagSeguroSmart {
 
 
      //NFC
+     private static final String AUTH_NFC = "paymentAuthNfc";
+     private static final String START_NFC = "paymentStartNfc";
+     private static final String STOP_NFC = "paymentStopNfc";
      private static final String REWRITE_NFC = "paymentReWriteNfc";
      private static final String WRITE_NFC = "paymentWriteNfc";
      private static final String READ_NFC = "paymentReadNfc";
      private static final String FORMAT_NFC = "paymentFormatNfc";
      private static final String DEBIT_NFC = "paymentDebitNfc";
+
+    //NFC DIRECTLY
+     private static final String REWRITE_DIRECTLY_NFC = "paymentReWriteDirectlyNfc";
+     private static final String DEBIT_DIRECTLY_NFC = "paymentDebitDirectlyNfc";
 
     public PagSeguroSmart(Context context, MethodChannel channel) {
         this.plugPag = new PlugPag(context,new PlugPagAppIdentification("Pagseguro Smart Flutter","0.0.1"));
@@ -84,13 +91,16 @@ public class PagSeguroSmart {
             this.nfcPayment.writeNFCCard(call.argument("idCaixa"), call.argument("idCarga"), call.argument("valorProdutosString"), call.argument("nome"), call.argument("cpf"), call.argument("numeroTag"), call.argument("saldoAtual"), call.argument("celular"), call.argument("ativo"));
         }
         else if(call.method.equals(REWRITE_NFC)) {
-            this.nfcPayment.reWriteNFCCard(call.argument("saldoAtual"), call.argument("valorProdutosString"));
+            this.nfcPayment.reWriteNFCCard(call.argument("idCaixa"), call.argument("idCarga"), call.argument("valorProdutosString"), call.argument("nome"), call.argument("cpf"), call.argument("numeroTag"), call.argument("saldoAtual"), call.argument("celular"), call.argument("ativo"));
         }
         else if(call.method.equals(FORMAT_NFC)) {
             this.nfcPayment.formatNFCCard();
         }
         else if(call.method.equals(DEBIT_NFC)) {
             this.nfcPayment.debitNFCCard(call.argument("saldoAtual"),call.argument("valorProdutos"));
+        }
+        else if(call.method.equals(START_NFC)) {
+            this.nfcPayment.startNFCCardDirectly();
         }
         else{
             result.notImplemented();

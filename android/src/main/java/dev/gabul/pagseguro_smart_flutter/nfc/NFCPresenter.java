@@ -2,41 +2,231 @@ package dev.gabul.pagseguro_smart_flutter.nfc;
 import javax.inject.Inject;
 import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPag;
 import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPagNearFieldCardData;
+import br.com.uol.pagseguro.plugpagservice.wrapper.data.request.PlugPagNFCAuth;
+import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPag;
+import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPagTransactionResult;
+import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPagAppIdentification;
+import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPagNearFieldCardData;
+import br.com.uol.pagseguro.plugpagservice.wrapper.data.request.PlugPagSimpleNFCData;
+import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPagNFCResult;
+import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPagAbortResult;
+import java.util.List;
+import java.util.ArrayList;
+import android.os.AsyncTask;
+import br.com.uol.pagseguro.plugpagservice.wrapper.data.request.PlugPagBeepData;
+import br.com.uol.pagseguro.plugpagservice.wrapper.data.request.PlugPagLedData;
+import br.com.uol.pagseguro.plugpagservice.wrapper.data.request.PlugPagNFCAuth;
+import br.com.uol.pagseguro.plugpagservice.wrapper.data.result.PlugPagNFCInfosResult;
 import io.flutter.plugin.common.MethodChannel;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import br.com.uol.pagseguro.plugpagservice.wrapper.data.request.PlugPagSimpleNFCData;
 
 public class NFCPresenter  {
 
     private final NFCUseCase mUseCase;
     private final NFCFragment mFragment;
+    private final PlugPag mPlugPag;
+
+    private String idCaixa;
+    private String idCarga;
+    private String valor;
+    private String nome;
+    private String cpf;
+    private String numeroTag;
+    private String saldoAtual;
+    private String celular;
+    private String ativo;
+    private String type;
 
     private Disposable mSubscribe;
 
     @Inject
     public NFCPresenter(PlugPag plugPag, MethodChannel channel) {
         mUseCase = new NFCUseCase(plugPag);
+        mPlugPag = plugPag;
         mFragment = new NFCFragment(channel);
     }
 
     public void readNFCCard() {
-        dispose();
-        mSubscribe = mUseCase.readNFCCard()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> mFragment.showSuccess(result),
-                           throwable ->mFragment.showError(throwable.getMessage()));
+        this.type = "read";
+        this.startNFCCardDirectly();
     }
 
+
     public void writeNFCCard(String idCaixa, String idCarga, String valor, String nome, String cpf, String numeroTag, String saldoAtual, String celular, String ativo) {
+        this.type = "write";
+        this.idCaixa = idCaixa;
+        this.idCarga = idCarga;
+        this.valor = valor;
+        this.nome = nome;
+        this.cpf = cpf;
+        this.numeroTag = numeroTag;
+        this.saldoAtual = saldoAtual;
+        this.celular = celular;
+        this.ativo = ativo;
+        this.startNFCCardDirectly();
+    }
+
+    public void formatNFCCard() {
+        dispose();
+        this.type = "format";
+        this.startNFCCardDirectly();
+    }
+
+     public void readNFCCardDirectly(Object res) {
+
+        byte[] bytePassword = {(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff};
+        PlugPagSimpleNFCData cardData = new PlugPagSimpleNFCData(PlugPagNearFieldCardData.ONLY_M, 1, bytePassword);
+
+        mSubscribe = mUseCase.readNFCCardDirectly(cardData)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> this.stopNFCCardDirectlyRead(result),
+                        throwable ->mFragment.showError(throwable.getMessage()));
+
+    }
+
+    public void startNFCCardDirectly() {
+        dispose();
+
+
+        mSubscribe = mUseCase.startNFCCardDirectly()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> this.executeBeep(result),
+                        throwable ->mFragment.showError(throwable.getMessage()));
+    }
+
+    public void executeBeep(Object res) {
+        dispose();
+        mSubscribe = mUseCase.executePlugPagBeepData(new PlugPagBeepData(PlugPagBeepData.FREQUENCE_LEVEL_5, 5))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> this.showLed(result),
+                        throwable ->mFragment.showError(throwable.getMessage()));
+
+    }
+
+    public void showLed(Object res) {
+
+        mSubscribe = mUseCase.showLed(new PlugPagLedData(PlugPagLedData.LED_YELLOW))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> this.authNFCCardDirectly(result),
+                        throwable ->mFragment.showError(throwable.getMessage()));
+
+    }
+
+    public void authNFCCardDirectly(Object res) {
+        dispose();
+
+        byte[] bytePassword = {(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff};
+
+
+
+        mSubscribe = mUseCase.authNFCCardDirectly(new PlugPagNFCAuth(PlugPagNearFieldCardData.ONLY_M, (byte) 1, bytePassword))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> this.hideLed(result),
+                        throwable ->mFragment.showError(throwable.getMessage()));
+    }
+
+    public void hideLed(Object res) {
+
+        mSubscribe = mUseCase.showLed(new PlugPagLedData(PlugPagLedData.LED_OFF))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> executeAction(result),
+                        throwable ->mFragment.showError(throwable.getMessage()));
+
+    }
+
+    public void executeAction(Object res) {
+
+        if(type == "read") {
+            this.readNFCCardDirectly(res);
+        }
+
+        if(type == "write") {
+            this.writeNFCCardDirectly();
+        }
+
+        if(type == "format") {
+            this.formatNFCCardDirectly();
+        }
+
+    }
+
+    public void stopNFCCardDirectlyRead(PlugPagNFCResult res) {
+
+        mSubscribe = mUseCase.stopNFCCardDirectly()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> mFragment.showSuccess(res),
+                        throwable ->mFragment.showError(throwable.getMessage()));
+    }
+
+    public void stopNFCCardDirectlyWrite(Object res) {
+
+        mSubscribe = mUseCase.stopNFCCardDirectly()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> mFragment.showSuccessWrite((int) result),
+                        throwable ->mFragment.showError(throwable.getMessage()));
+    }
+
+    public void stopNFCCardDirectlyFormat(Object res) {
+
+        mSubscribe = mUseCase.stopNFCCardDirectly()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> mFragment.showSuccessWrite((int) result),
+                        throwable ->mFragment.showError(throwable.getMessage()));
+    }
+
+
+    public void writeNFCCardDirectly() {
+        dispose();
+
+        byte[] bytePassword = {(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff};
+        PlugPagSimpleNFCData cardData = new PlugPagSimpleNFCData(PlugPagNearFieldCardData.ONLY_M, 1, bytePassword);
+        cardData.setStartSlot(1);
+        cardData.setEndSlot(12);
+        //cardData.setTypeCard(4);
+        //cardData.setTimeOutRead(10);
+        //cardData.setCardType(4);
+
+        cardData.getSlots()[1].put("data", this.valor.getBytes());
+        cardData.getSlots()[2].put("data", this.idCaixa.getBytes());
+        cardData.getSlots()[6].put("data", this.idCarga.getBytes());
+        cardData.getSlots()[8].put("data", this.cpf.getBytes());
+        cardData.getSlots()[9].put("data", this.numeroTag.getBytes());
+        cardData.getSlots()[10].put("data", this.nome.getBytes());
+        cardData.getSlots()[11].put("data", this.celular.getBytes());
+        cardData.getSlots()[12].put("data", this.ativo.getBytes());
+
+        mSubscribe = mUseCase.writeToNFCCardDirectly(cardData)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> this.stopNFCCardDirectlyWrite(result),
+                        throwable ->mFragment.showError(throwable.getMessage()));
+    }
+
+    public void reWriteNFCCard(String idCaixa, String idCarga, String valor, String nome, String cpf, String numeroTag, String saldoAtual, String celular, String ativo) {
         dispose();
 
         PlugPagNearFieldCardData cardData = new PlugPagNearFieldCardData();
         cardData.setStartSlot(1);
-        cardData.setEndSlot(28);
+        cardData.setEndSlot(12);
 
-        cardData.getSlots()[1].put("data", valor.getBytes());
+        Double valorAtual = Double.parseDouble(removeAsterisco(saldoAtual));
+        Double valorRecarga = Double.parseDouble(removeAsterisco(valor));
+        Double valorNovo = (valorAtual + valorRecarga);
+
+        cardData.getSlots()[1].put("data", adicionaAsterisco(valorNovo.toString()).getBytes());
         cardData.getSlots()[2].put("data", idCaixa.getBytes());
         cardData.getSlots()[6].put("data", idCarga.getBytes());
         cardData.getSlots()[8].put("data", cpf.getBytes());
@@ -44,26 +234,6 @@ public class NFCPresenter  {
         cardData.getSlots()[10].put("data", nome.getBytes());
         cardData.getSlots()[11].put("data", celular.getBytes());
         cardData.getSlots()[12].put("data", ativo.getBytes());
-
-        mSubscribe = mUseCase.writeNFCCard(cardData)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> mFragment.showSuccessWrite(result),
-                        throwable -> mFragment.showError(throwable.getMessage()));
-    }
-
-    public void reWriteNFCCard(String saldoAtual, String valor) {
-        dispose();
-
-        PlugPagNearFieldCardData cardData = new PlugPagNearFieldCardData();
-        cardData.setStartSlot(1);
-        cardData.setEndSlot(28);
-
-        Double valorAtual = Double.parseDouble(removeAsterisco(saldoAtual));
-        Double valorRecarga = Double.parseDouble(removeAsterisco(valor));
-        Double valorNovo = (valorAtual + valorRecarga);
-
-        cardData.getSlots()[1].put("data", adicionaAsterisco(valorNovo.toString()).getBytes());
 
         mSubscribe = mUseCase.writeNFCCard(cardData)
                 .subscribeOn(Schedulers.io())
@@ -93,26 +263,15 @@ public class NFCPresenter  {
     }
 
 
-    public void formatNFCCard() {
-        dispose();
+    public void formatNFCCardDirectly() {
 
-        String vazio = "****************";
-        PlugPagNearFieldCardData cardData = new PlugPagNearFieldCardData();
-        cardData.setStartSlot(1);
-        cardData.setEndSlot(28);
+        String textToWrite = "teste_com16bytes";
 
-        cardData.getSlots()[1].put("data", vazio.getBytes());
-        cardData.getSlots()[2].put("data", vazio.getBytes());
-        cardData.getSlots()[6].put("data", vazio.getBytes());
-        cardData.getSlots()[8].put("data", vazio.getBytes());
-        cardData.getSlots()[9].put("data", vazio.getBytes());
-        cardData.getSlots()[10].put("data", vazio.getBytes());
-
-        mSubscribe = mUseCase.writeNFCCard(cardData)
+        mSubscribe = mUseCase.writeToNFCCardDirectly(new PlugPagSimpleNFCData(PlugPagNearFieldCardData.ONLY_M, 6, textToWrite.getBytes()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> mFragment.showSuccessFormat(result),
-                        throwable -> mFragment.showError(throwable.getMessage()));
+                .subscribe(result -> this.stopNFCCardDirectlyFormat(result),
+                        throwable ->mFragment.showError(throwable.getMessage()));
     }
 
 
