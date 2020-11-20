@@ -6,7 +6,7 @@ import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPagNFCResult;
 
  public interface NFCContract  {
 
-    void showSuccess(PlugPagNFCResult result);
+    void showSuccess(NFCData result);
     void showSuccessWrite(int result);
 
     void showSuccessStartDirectly(Object result);

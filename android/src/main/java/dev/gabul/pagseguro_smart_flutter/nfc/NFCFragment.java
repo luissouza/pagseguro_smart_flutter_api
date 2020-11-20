@@ -29,19 +29,13 @@ public class NFCFragment implements NFCContract {
 
 
     @Override
-    public void showSuccess(PlugPagNFCResult result) {
+    public void showSuccess(NFCData result) {
 
         final List<String> results = new ArrayList<>();
-        results.add(new String(result.getSlots()[1].get("data")));
-        results.add(new String(result.getSlots()[2].get("data")));
-        results.add(new String(result.getSlots()[6].get("data")));
-        results.add(new String(result.getSlots()[8].get("data")));
-        results.add(new String(result.getSlots()[9].get("data")));
-        results.add(new String(result.getSlots()[10].get("data")));
-        results.add(new String(result.getSlots()[11].get("data")));
-        results.add(new String(result.getSlots()[12].get("data")));
-        results.add(String.valueOf(result.getResult()));
-            this.channel.invokeMethod(ON_SUCCESS, results);
+        results.add(result.getName());
+        results.add(result.getCpf());
+
+        this.channel.invokeMethod(ON_SUCCESS, results);
     }
 
 

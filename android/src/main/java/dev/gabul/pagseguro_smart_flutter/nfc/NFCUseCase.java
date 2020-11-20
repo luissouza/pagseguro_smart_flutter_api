@@ -1,5 +1,7 @@
 package dev.gabul.pagseguro_smart_flutter.nfc;
 
+import android.nfc.tech.MifareClassic;
+
 import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPag;
 import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPagNFCResult;
 import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPagNearFieldCardData;
@@ -74,14 +76,23 @@ public class NFCUseCase {
     public Observable<PlugPagNFCResult> readNFCCardDirectly(PlugPagSimpleNFCData cardData) {
         return Observable.create(emitter -> {
 
+
+            PlugPagNFCAuth auth = new PlugPagNFCAuth(PlugPagNearFieldCardData.ONLY_M, (byte) cardData.getStartSlot(), MifareClassic.KEY_DEFAULT);
+            int resultAuth = mPlugPag.authNFCCardDirectly(auth);
+            if (resultAuth != 1){
+                emitter.onError(new PlugPagException("Erro na autenticação"));
+                emitter.onComplete();
+                return;
+            }
+
             PlugPagNFCResult result = mPlugPag.readNFCCardDirectly(cardData);
 
-
-            if (result.getResult() == 1) {
+            if (result.getResult() == 1){
                 emitter.onNext(result);
             } else {
-                emitter.onError(new PlugPagException());
+                emitter.onError(new PlugPagException("Ocoreu um erro ao ler o cartão nfc"));
             }
+            mPlugPag.stopNFCCardDirectly();
 
             emitter.onComplete();
         });
@@ -97,7 +108,7 @@ public class NFCUseCase {
             if (result == 1) {
                 emitter.onNext(result);
             } else {
-                emitter.onError(new PlugPagException());
+                emitter.onError(new PlugPagException("Erro ao iniciar serviço NFC"));
             }
 
             emitter.onComplete();
@@ -113,7 +124,7 @@ public class NFCUseCase {
             if (result == 1) {
                 emitter.onNext(result);
             } else {
-                emitter.onError(new PlugPagException());
+                emitter.onError(new PlugPagException("Erro ao parar serviço NFC"));
             }
 
             emitter.onComplete();
