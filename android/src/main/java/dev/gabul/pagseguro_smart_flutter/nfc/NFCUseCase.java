@@ -24,6 +24,7 @@ public class NFCUseCase {
 
     public Observable<PlugPagNFCResult> readNFCCard() {
         return Observable.create(emitter -> {
+
             PlugPagNearFieldCardData cardData = new PlugPagNearFieldCardData();
             cardData.setStartSlot(1);
             cardData.setEndSlot(28);
@@ -43,9 +44,17 @@ public class NFCUseCase {
 
     public Observable<PlugPagNFCResult> writeNFCCard(PlugPagNearFieldCardData dataCard) {
 
+
         return Observable.create(emitter -> {
 
-            PlugPagNFCResult result = mPlugPag.writeToNFCCard(dataCard);
+//            int resultStartNfc = mPlugPag.startNFCCardDirectly();
+//            if (resultStartNfc != 1) {
+//                emitter.onError(new PlugPagException("Ocorreu um erro ao iniciar serviço nfc no write"));
+//                emitter.onComplete();
+//                return;
+//            }
+
+            PlugPagNFCResult result = this.mPlugPag.writeToNFCCard(dataCard);
 
             if (result.getResult() == 1) {
                 emitter.onNext(result);
@@ -53,6 +62,7 @@ public class NFCUseCase {
                 emitter.onError(new PlugPagException());
             }
 
+           // this.mPlugPag.stopNFCCardDirectly();
             emitter.onComplete();
         });
     }
@@ -61,13 +71,37 @@ public class NFCUseCase {
 
         return Observable.create(emitter -> {
 
-            int result = mPlugPag.writeToNFCCardDirectly(dataCard);
+            int resultStartNfc = mPlugPag.startNFCCardDirectly();
+            if (resultStartNfc != 1) {
+                emitter.onError(new PlugPagException("Ocorreu um erro ao iniciar serviço nfc"));
+                emitter.onComplete();
+                return;
+            }
+
+            int resultAuth = this.mPlugPag.authNFCCardDirectly(new PlugPagNFCAuth(PlugPagNearFieldCardData.ONLY_M, (byte) dataCard.getStartSlot(), MifareClassic.KEY_DEFAULT));
+
+            if (resultAuth != 1) {
+
+                mPlugPag.setLed(new PlugPagLedData(PlugPagLedData.LED_RED));
+                mPlugPag.setLed(new PlugPagLedData(PlugPagLedData.LED_OFF));
+                emitter.onError(new PlugPagException("Erro na autenticação"));
+                emitter.onComplete();
+                return;
+            }
+
+            int result = this.mPlugPag.writeToNFCCardDirectly(dataCard);
 
             if (result == 1) {
                 emitter.onNext(result);
             } else {
-                emitter.onError(new PlugPagException());
+                mPlugPag.setLed(new PlugPagLedData(PlugPagLedData.LED_RED));
+                mPlugPag.setLed(new PlugPagLedData(PlugPagLedData.LED_OFF));
+                emitter.onError(new PlugPagException("Erro ao escrever no cartão NFC"));
             }
+
+            System.out.println("WRITE result.getResult() : " + result);
+
+            mPlugPag.stopNFCCardDirectly();
 
             emitter.onComplete();
         });
@@ -76,27 +110,42 @@ public class NFCUseCase {
     public Observable<PlugPagNFCResult> readNFCCardDirectly(PlugPagSimpleNFCData cardData) {
         return Observable.create(emitter -> {
 
+            int resultStartNfc = mPlugPag.startNFCCardDirectly();
+            if (resultStartNfc != 1) {
+                emitter.onError(new PlugPagException("Ocorreu um erro ao iniciar serviço nfc"));
+                emitter.onComplete();
+                return;
+            }
 
             PlugPagNFCAuth auth = new PlugPagNFCAuth(PlugPagNearFieldCardData.ONLY_M, (byte) cardData.getStartSlot(), MifareClassic.KEY_DEFAULT);
             int resultAuth = mPlugPag.authNFCCardDirectly(auth);
-            if (resultAuth != 1){
+            if (resultAuth != 1) {
+
+                mPlugPag.setLed(new PlugPagLedData(PlugPagLedData.LED_RED));
+                Thread.sleep(2000);
+                mPlugPag.setLed(new PlugPagLedData(PlugPagLedData.LED_OFF));
                 emitter.onError(new PlugPagException("Erro na autenticação"));
                 emitter.onComplete();
                 return;
             }
 
             PlugPagNFCResult result = mPlugPag.readNFCCardDirectly(cardData);
-
-            if (result.getResult() == 1){
+            System.out.println("result.getResult() " + result.getResult());
+            if (result.getResult() == 1) {
+                System.out.println("result.getResult() : " + Utils.convertBytes2String(result.getSlots()[result.getStartSlot()].get("data"), false));
                 emitter.onNext(result);
             } else {
+                mPlugPag.setLed(new PlugPagLedData(PlugPagLedData.LED_RED));
+                Thread.sleep(2000);
+                mPlugPag.setLed(new PlugPagLedData(PlugPagLedData.LED_OFF));
                 emitter.onError(new PlugPagException("Ocoreu um erro ao ler o cartão nfc"));
             }
-            mPlugPag.stopNFCCardDirectly();
 
+            mPlugPag.stopNFCCardDirectly();
             emitter.onComplete();
         });
     }
+
 
 
     public Observable<Object> startNFCCardDirectly() {
@@ -152,23 +201,6 @@ public class NFCUseCase {
         return Observable.create(emitter -> {
 
             int result = mPlugPag.setLed(plugPagLedData);
-
-            if (result == 1) {
-                emitter.onNext(result);
-            } else {
-                emitter.onError(new PlugPagException());
-            }
-
-            emitter.onComplete();
-        });
-    }
-
-    public Observable<Object> authNFCCardDirectly(PlugPagNFCAuth plugPagNFCAuth) {
-
-
-        return Observable.create(emitter -> {
-
-            int result = mPlugPag.authNFCCardDirectly(plugPagNFCAuth);
 
             if (result == 1) {
                 emitter.onNext(result);
