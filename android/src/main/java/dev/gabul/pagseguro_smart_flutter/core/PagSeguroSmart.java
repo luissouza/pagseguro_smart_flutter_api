@@ -3,15 +3,23 @@ package dev.gabul.pagseguro_smart_flutter.core;
 import android.content.Context;
 
 import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPag;
-import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPagAppIdentification;
+import dev.gabul.pagseguro_smart_flutter.managers.UserDataManager;
+import dev.gabul.pagseguro_smart_flutter.nfc.NFCFragment;
 import dev.gabul.pagseguro_smart_flutter.nfc.NFCPresenter;
+import dev.gabul.pagseguro_smart_flutter.nfc.usecase.NFCUseCase;
 import dev.gabul.pagseguro_smart_flutter.payments.PaymentsPresenter;
+import dev.gabul.pagseguro_smart_flutter.user.usecase.EditUserUseCase;
+import dev.gabul.pagseguro_smart_flutter.user.usecase.GetUserUseCase;
+import dev.gabul.pagseguro_smart_flutter.user.usecase.NewUserUseCase;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
 public class PagSeguroSmart {
-    final PlugPag plugPag;
-    final MethodChannel mChannel;
+    private PlugPag plugPag;
+    private MethodChannel mChannel;
+    private NFCUseCase mUseCase;
+    private NFCFragment mFragment;
+    UserDataManager mUserManager;
 
      //FUNCTIONS
      PaymentsPresenter payment;
@@ -26,24 +34,15 @@ public class PagSeguroSmart {
      private static final String PAYMENT_ABORT = "paymentAbort";
      private static final String LAST_TRANSACTION = "paymentLastTransaction";
      private static final String REFUND = "paymentRefund";
-
-
      //NFC
-     private static final String AUTH_NFC = "paymentAuthNfc";
-     private static final String START_NFC = "paymentStartNfc";
-     private static final String STOP_NFC = "paymentStopNfc";
-     private static final String REWRITE_NFC = "paymentReWriteNfc";
      private static final String WRITE_NFC = "paymentWriteNfc";
      private static final String READ_NFC = "paymentReadNfc";
      private static final String FORMAT_NFC = "paymentFormatNfc";
-     private static final String DEBIT_NFC = "paymentDebitNfc";
+     private static final String REWRITE_NFC = "paymentReWriteNfc";
 
-    //NFC DIRECTLY
-     private static final String REWRITE_DIRECTLY_NFC = "paymentReWriteDirectlyNfc";
-     private static final String DEBIT_DIRECTLY_NFC = "paymentDebitDirectlyNfc";
 
     public PagSeguroSmart(Context context, MethodChannel channel) {
-        this.plugPag = new PlugPag(context,new PlugPagAppIdentification("Pagseguro Smart Flutter","0.0.1"));
+        this.plugPag = new PlugPag(context);
         this.mChannel = channel;
     }
 
@@ -53,8 +52,17 @@ public class PagSeguroSmart {
             this.payment.dispose();
 
 
-        if(this.nfcPayment == null)
-            this.nfcPayment = new NFCPresenter(this.plugPag, this.mChannel);
+        //if(this.nfcPayment == null)
+
+            mUseCase = new NFCUseCase(plugPag);
+            mFragment = new NFCFragment(mChannel);
+            mUserManager = new UserDataManager(
+                    new GetUserUseCase(mUseCase),
+                    new NewUserUseCase(mUseCase),
+                    new EditUserUseCase(mUseCase)
+            );
+
+            this.nfcPayment = new NFCPresenter(mFragment, mUseCase, mUserManager);
             this.nfcPayment.dispose();
 
         if(call.method.equals(PAYMENT_DEBIT)) {
@@ -88,21 +96,18 @@ public class PagSeguroSmart {
             this.nfcPayment.readNFCCard();
         }
         else if(call.method.equals(WRITE_NFC)) {
-            this.nfcPayment.writeNFCCard(call.argument("idCaixa"), call.argument("idCarga"), call.argument("valorProdutosString"), call.argument("nome"), call.argument("cpf"), call.argument("numeroTag"), call.argument("saldoAtual"), call.argument("celular"), call.argument("ativo"));
+            this.nfcPayment.writeNFCCard(call.argument("valor"), call.argument("nome"), call.argument("cpf"), call.argument("numeroTag"), call.argument("celular"), call.argument("aberto"));
         }
         else if(call.method.equals(REWRITE_NFC)) {
-            this.nfcPayment.reWriteNFCCard(call.argument("idCaixa"), call.argument("idCarga"), call.argument("valorProdutosString"), call.argument("nome"), call.argument("cpf"), call.argument("numeroTag"), call.argument("saldoAtual"), call.argument("celular"), call.argument("ativo"));
+            this.nfcPayment.reWriteNFCCard(call.argument("valor"));
         }
         else if(call.method.equals(FORMAT_NFC)) {
             this.nfcPayment.formatNFCCard();
         }
-        else if(call.method.equals(DEBIT_NFC)) {
-            this.nfcPayment.debitNFCCard(call.argument("saldoAtual"),call.argument("valorProdutos"));
-        }
-        else if(call.method.equals(START_NFC)) {
-            this.nfcPayment.startNFCCardDirectly();
-        }
-        else{
+//        else if(call.method.equals(DEBIT_NFC)) {
+//            this.nfcPayment.debitNFCCard(call.argument("saldoAtual"),call.argument("valorProdutos"));
+//        }
+        else {
             result.notImplemented();
         }
     }

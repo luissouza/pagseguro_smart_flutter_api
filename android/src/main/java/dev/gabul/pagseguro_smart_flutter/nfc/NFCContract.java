@@ -1,25 +1,26 @@
 package dev.gabul.pagseguro_smart_flutter.nfc;
 
-import com.hannesdorfmann.mosby.mvp.MvpView;
-
 import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPagNFCResult;
+import dev.gabul.pagseguro_smart_flutter.user.UserData;
 
- public interface NFCContract  {
+public interface NFCContract  {
 
-    void showSuccess(NFCData result);
-    void showSuccessWrite(int result);
 
-    void showSuccessStartDirectly(Object result);
-    void showSuccessAuthDirectly(Object result);
-    void showSuccessWriteDirectly(Object result);
-    void showSuccessReadDirectly(Object result);
-    void showSuccessReWriteDirectly(Object result);
-    void showSuccessFormatDirectly(Object result);
-    void showSuccessReWrite(PlugPagNFCResult result);
-    void showSuccessStopDirectly(Object result);
-    void showSuccessFormat(PlugPagNFCResult result);
+    //Success
+    void showSuccess(UserData result);
+    void showSuccessWrite(Object result);
+    void showSuccessReWrite(Object result);
+    void showSuccessFormat(Object result);
     void showSuccessDebitNfc(PlugPagNFCResult result);
+
+    //Error
+    void showErrorRead(String message);
+    void showErrorWrite(String message);
+    void showErrorReWrite(String message);
+    void showErrorFormat(String message);
+    void showErrorDebitNfc(String message);
     void showError(String message);
+
     void onReadCard();
     void onWriteCard();
     void onAbort();

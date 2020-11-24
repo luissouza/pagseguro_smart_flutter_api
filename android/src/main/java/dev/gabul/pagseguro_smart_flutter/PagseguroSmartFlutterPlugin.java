@@ -28,6 +28,7 @@ public class PagseguroSmartFlutterPlugin implements FlutterPlugin, MethodCallHan
   private PagSeguroSmart pagSeguroSmart;
 
 
+
   public PagseguroSmartFlutterPlugin() {}
 
   public static void registerWith(Registrar registrar) {

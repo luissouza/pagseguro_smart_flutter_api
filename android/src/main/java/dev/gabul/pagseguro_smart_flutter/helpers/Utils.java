@@ -1,10 +1,11 @@
-package dev.gabul.pagseguro_smart_flutter.nfc;
+package dev.gabul.pagseguro_smart_flutter.helpers;
 
 import com.google.common.primitives.Ints;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+
 
 public class Utils {
 
@@ -80,6 +81,29 @@ public class Utils {
             arrays.add(slice);
         }
         return arrays;
+    }
+
+    public static String removeAsterisco(String valor) {
+
+        if(valor != null) {
+            return valor.replace("*", "");
+        }
+
+        return "";
+    }
+
+
+    public static String adicionaAsterisco(String valor) {
+        if (valor.length() >= 16) {
+            return valor;
+        }
+        StringBuilder sb = new StringBuilder();
+        while (sb.length() < 16 - valor.length()) {
+            sb.append('*');
+        }
+        sb.append(valor);
+
+        return sb.toString();
     }
 
 }
