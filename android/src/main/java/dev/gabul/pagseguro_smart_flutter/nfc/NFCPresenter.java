@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPag;
 
 
+import br.com.uol.pagseguro.plugpagservice.wrapper.data.request.PlugPagLedData;
 import dev.gabul.pagseguro_smart_flutter.helpers.NFCConstants;
 import dev.gabul.pagseguro_smart_flutter.helpers.Utils;
 import dev.gabul.pagseguro_smart_flutter.managers.UserDataManager;
@@ -34,31 +35,83 @@ public class NFCPresenter  {
 
     public void readNFCCard() {
 
-        mSubscribe = mUserManager.getUserData()
+        mSubscribe = mUseCase.controlLed(new PlugPagLedData(PlugPagLedData.LED_BLUE))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        result -> mFragment.showSuccess(result),
-                        throwable -> mFragment.showError(throwable.getMessage())
+                        result -> getUserData(),
+                        throwable -> mFragment.showErrorRead(throwable.getMessage())
                 );
 
     }
 
+    public void getUserData() {
+
+        mSubscribe = mUserManager.getUserData()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        result -> showSuccessRead(result),
+                        throwable -> mFragment.showErrorRead(throwable.getMessage())
+                );
+
+
+    }
+
+    public void showSuccessRead(UserData userData) {
+
+        mSubscribe = mUseCase.controlLed(new PlugPagLedData(PlugPagLedData.LED_GREEN))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        result -> mFragment.showSuccess(userData),
+                        throwable -> mFragment.showErrorRead(throwable.getMessage())
+                );
+    }
+
+
+
     public void writeNFCCard(String value, String name, String cpf, String numberTag, String cellPhone, String active) {
 
         UserData userData = new UserData(Utils.adicionaAsterisco(value), Utils.adicionaAsterisco(name), Utils.adicionaAsterisco(cpf), Utils.adicionaAsterisco(numberTag), Utils.adicionaAsterisco(cellPhone), Utils.adicionaAsterisco(active));
+
+        mSubscribe = mUseCase.controlLed(new PlugPagLedData(PlugPagLedData.LED_BLUE))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        result -> writeUserData(userData),
+                        throwable -> mFragment.showErrorRead(throwable.getMessage())
+                );
+
+    }
+
+    public void writeUserData(UserData userData) {
 
         mSubscribe = mUserManager.writeUserData(userData)
                 .lastElement()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        result -> mFragment.showSuccessWrite(result),
+                        result -> showSuccessWrite(result),
                         throwable -> mFragment.showErrorWrite(throwable.getMessage()),
                         () -> {
                             Log.d(NFCPresenter.class.getSimpleName(), "writeUser finished");
-                           // mView.onWriteNfcSuccessful();
+                            // mView.onWriteNfcSuccessful();
                         }
+                );
+
+
+    }
+
+
+    public void showSuccessWrite(Integer res) {
+
+        mSubscribe = mUseCase.controlLed(new PlugPagLedData(PlugPagLedData.LED_GREEN))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        result -> mFragment.showSuccessWrite(res),
+                        throwable -> mFragment.showErrorRead(throwable.getMessage())
                 );
     }
 
@@ -94,6 +147,7 @@ public class NFCPresenter  {
         mSubscribe = mUseCase.clearBlocks(blocks)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .distinct()
                 .subscribe(
                         result -> mFragment.showSuccessFormat(result),
                         throwable -> mFragment.showErrorFormat(throwable.getMessage())
