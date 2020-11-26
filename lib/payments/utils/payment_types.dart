@@ -13,7 +13,12 @@ enum PaymentTypeHandler {
   SHOW_SUCCESS_WRITE,
   SHOW_SUCCESS_RE_WRITE,
   SHOW_SUCCESS_FORMAT,
-  SHOW_SUCCESS_DEBIT_NFC
+  SHOW_SUCCESS_DEBIT_NFC,
+  SHOW_ERROR_READ,
+  SHOW_ERROR_WRITE,
+  SHOW_ERROR_RE_WRITE,
+  SHOW_ERROR_FORMAT,
+  SHOW_ERROR_DEBIT_NFC
 }
 
 extension StringPaymentHandlerExt on String {
@@ -49,6 +54,18 @@ extension StringPaymentHandlerExt on String {
         return PaymentTypeHandler.SHOW_SUCCESS_FORMAT;
       case "showSuccessDebitNfc":
         return PaymentTypeHandler.SHOW_SUCCESS_DEBIT_NFC;  
+      case "showErrorRead":
+        return PaymentTypeHandler.SHOW_ERROR_READ;  
+      case "showErrorWrite":
+        return PaymentTypeHandler.SHOW_ERROR_WRITE;  
+      case "showErrorReWrite":
+        return PaymentTypeHandler.SHOW_ERROR_RE_WRITE;  
+      case "showErrorFormat":
+        return PaymentTypeHandler.SHOW_ERROR_FORMAT;  
+      case "showErrorDebitNfc":
+        return PaymentTypeHandler.SHOW_ERROR_DEBIT_NFC;        
+
+
       default:
         throw "NOT IMPLEMENTED";
     }
@@ -88,6 +105,16 @@ extension PaymentTypeHandlerExt on PaymentTypeHandler {
         return "showSuccessFormat";
       case PaymentTypeHandler.SHOW_SUCCESS_DEBIT_NFC:
         return "showSuccessDebitNfc";
+      case PaymentTypeHandler.SHOW_ERROR_READ:
+        return "showErrorRead";
+      case PaymentTypeHandler.SHOW_ERROR_WRITE:
+        return "showErrorWrite";
+      case PaymentTypeHandler.SHOW_ERROR_RE_WRITE:
+        return "showErrorReWrite";
+      case PaymentTypeHandler.SHOW_ERROR_FORMAT:
+        return "showErrorFormat";
+      case PaymentTypeHandler.SHOW_SUCCESS_DEBIT_NFC:
+        return "showErrorDebitNfc";
     }
   }
 }

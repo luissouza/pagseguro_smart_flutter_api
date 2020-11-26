@@ -16,6 +16,12 @@ abstract class PaymentHandler {
 
   void showSuccessDebitNfc(int result);
 
+  void showErrorRead(String message);
+  void showErrorWrite(String message);
+  void showErrorReWrite(String message);
+  void showErrorFormat(String message);
+  void showErrorDebitNfc(String message);
+
   void onLoading(bool show);
 
   void writeToFile({String transactionCode, String transactionId});
