@@ -33,7 +33,7 @@ public class NFCPresenter  {
         this.mUserManager = userManager;
     }
 
-    public void readNFCCard() {
+    public void readNFCCard(String idEvento) {
 
         mSubscribe = mUseCase.controlLed(new PlugPagLedData(PlugPagLedData.LED_BLUE))
                 .subscribeOn(Schedulers.io())
@@ -42,7 +42,6 @@ public class NFCPresenter  {
                         result -> getUserData(),
                         throwable -> mFragment.showErrorRead(throwable.getMessage())
                 );
-
     }
 
     public void getUserData() {
@@ -54,8 +53,6 @@ public class NFCPresenter  {
                         result -> showSuccessRead(result),
                         throwable -> mFragment.showErrorRead(throwable.getMessage())
                 );
-
-
     }
 
     public void showSuccessRead(UserData userData) {
@@ -71,7 +68,7 @@ public class NFCPresenter  {
 
 
 
-    public void writeNFCCard(String value, String name, String cpf, String numberTag, String cellPhone, String active) {
+    public void writeNFCCard(String value, String name, String cpf, String numberTag, String cellPhone, String active, String idEvento) {
 
         UserData userData = new UserData(Utils.adicionaAsterisco(value), Utils.adicionaAsterisco(name), Utils.adicionaAsterisco(cpf), Utils.adicionaAsterisco(numberTag), Utils.adicionaAsterisco(cellPhone), Utils.adicionaAsterisco(active));
 
@@ -111,26 +108,49 @@ public class NFCPresenter  {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         result -> mFragment.showSuccessWrite(res),
-                        throwable -> mFragment.showErrorRead(throwable.getMessage())
+                        throwable -> mFragment.showErrorWrite(throwable.getMessage())
                 );
     }
 
-    public void reWriteNFCCard(String value) {
+    public void showSuccessReWrite(Integer res) {
+
+        mSubscribe = mUseCase.controlLed(new PlugPagLedData(PlugPagLedData.LED_GREEN))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        result -> mFragment.showSuccessReWrite(res),
+                        throwable -> mFragment.showErrorReWrite(throwable.getMessage())
+                );
+    }
+
+    public void reWriteNFCCard(String value, String idEvento) {
 
         UserData userData = new UserData(Utils.adicionaAsterisco(value), null, null, null, null, null);
+
+        mSubscribe = mUseCase.controlLed(new PlugPagLedData(PlugPagLedData.LED_BLUE))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        result -> reWriteUserData(userData),
+                        throwable -> mFragment.showErrorReWrite(throwable.getMessage())
+                );
+    }
+
+    public void reWriteUserData(UserData userData) {
 
         mSubscribe = mUserManager.reWriteUserData(userData)
                 .lastElement()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        result -> mFragment.showSuccessReWrite(result),
+                        result -> showSuccessReWrite(result),
                         throwable -> mFragment.showErrorReWrite(throwable.getMessage()),
                         () -> {
                             Log.d(NFCPresenter.class.getSimpleName(), "writeUser finished");
                             // mView.onWriteNfcSuccessful();
                         }
                 );
+
     }
 
     public void formatNFCCard() {

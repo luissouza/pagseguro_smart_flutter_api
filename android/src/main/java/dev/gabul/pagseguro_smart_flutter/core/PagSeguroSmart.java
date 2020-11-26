@@ -93,13 +93,13 @@ public class PagSeguroSmart {
             result.success(true);
         }
         else if(call.method.equals(READ_NFC)) {
-            this.nfcPayment.readNFCCard();
+            this.nfcPayment.readNFCCard(call.argument("idEvento"));
         }
         else if(call.method.equals(WRITE_NFC)) {
-            this.nfcPayment.writeNFCCard(call.argument("valor"), call.argument("nome"), call.argument("cpf"), call.argument("numeroTag"), call.argument("celular"), call.argument("aberto"));
+            this.nfcPayment.writeNFCCard(call.argument("valor"), call.argument("nome"), call.argument("cpf"), call.argument("numeroTag"), call.argument("celular"), call.argument("aberto"), call.argument("idEvento"));
         }
         else if(call.method.equals(REWRITE_NFC)) {
-            this.nfcPayment.reWriteNFCCard(call.argument("valor"));
+            this.nfcPayment.reWriteNFCCard(call.argument("valor"), call.argument("idEvento"));
         }
         else if(call.method.equals(FORMAT_NFC)) {
             this.nfcPayment.formatNFCCard();
