@@ -151,6 +151,36 @@ class Payment {
         }
         break;
 
+      case PaymentTypeHandler.SHOW_ERROR_READ:
+        {
+          paymentHandler.showErrorRead(call.arguments);
+        }
+        break;
+
+      case PaymentTypeHandler.SHOW_ERROR_WRITE:
+        {
+          paymentHandler.showErrorWrite(call.arguments);
+        }
+        break;
+
+      case PaymentTypeHandler.SHOW_ERROR_RE_WRITE:
+        {
+          paymentHandler.showErrorReWrite(call.arguments);
+        }
+        break;
+
+      case PaymentTypeHandler.SHOW_ERROR_FORMAT:
+        {
+          paymentHandler.showErrorFormat(call.arguments);
+        }
+        break;
+
+      case PaymentTypeHandler.SHOW_ERROR_DEBIT_NFC:
+        {
+          paymentHandler.showErrorDebitNfc(call.arguments);
+        }
+        break;
+
       default:
         throw "METHOD NOT IMPLEMENTED";
     }
