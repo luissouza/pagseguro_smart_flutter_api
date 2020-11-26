@@ -43,8 +43,8 @@ class Payment {
     return channel.invokeMethod(PaymentTypeCall.REFUND.method, {"transactionCode": transactionCode, "transactionId": transactionId});
   }
 
-  Future<bool> readNfc() async {
-    return channel.invokeMethod(PaymentTypeCall.READ_NFC.method);
+  Future<bool> readNfc(idEvento) async {
+    return channel.invokeMethod(PaymentTypeCall.READ_NFC.method, {"idEvento": idEvento});
   }
 
   Future<bool> writeNfc(valor, nome, cpf, numeroTag, celular, aberto, idEvento) async {
