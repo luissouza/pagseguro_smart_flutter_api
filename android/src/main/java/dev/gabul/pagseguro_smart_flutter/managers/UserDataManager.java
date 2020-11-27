@@ -17,10 +17,11 @@ public class UserDataManager {
     private EditUserUseCase mEditUser;
     private DebitUserUseCase mDebitUser;
 
-    public UserDataManager(GetUserUseCase getUser, NewUserUseCase newUser, EditUserUseCase mEditUser) {
+    public UserDataManager(GetUserUseCase getUser, NewUserUseCase newUser, EditUserUseCase mEditUser, DebitUserUseCase mDebitUser) {
         this.mGetUser = getUser;
         this.mNewUser = newUser;
         this.mEditUser = mEditUser;
+        this.mDebitUser = mDebitUser;
     }
 
     public Single<UserData> getUserData(String idEvento){
