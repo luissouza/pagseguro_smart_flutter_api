@@ -27,14 +27,13 @@ public class NewUserUseCase {
     public Observable<Integer> writeUserInNFcCard(UserData userData){
 
         final List<Observable<Integer>> observableSources = Arrays.asList(
-
                 writeCardActiveInNfcCard(userData),
                 writeValueInNfcCard(userData),
                 writeNameInNfcCard(userData),
                 writeCpfInNfcCard(userData),
                 writeTagInNfcCard(userData),
-                writeCellPhoneInNfcCard(userData)
-
+                writeCellPhoneInNfcCard(userData),
+                writeCardEventIdInNfcCard(userData)
 
         );
 
@@ -64,6 +63,10 @@ public class NewUserUseCase {
 
     private Observable<Integer> writeCardActiveInNfcCard(UserData userData){
         return mNfcUseCase.writeNfc(buildCardData(NFCConstants.CARD_OPENED_BLOCK, userData.getActive()));
+    }
+
+    private Observable<Integer> writeCardEventIdInNfcCard(UserData userData){
+        return mNfcUseCase.writeNfc(buildCardData(NFCConstants.EVENT_ID_BLOCK, userData.getActive()));
     }
 
 

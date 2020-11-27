@@ -39,14 +39,14 @@ public class NFCPresenter  {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        result -> getUserData(),
+                        result -> getUserData(idEvento),
                         throwable -> mFragment.showErrorRead(throwable.getMessage())
                 );
     }
 
-    public void getUserData() {
+    public void getUserData(String idEvento) {
 
-        mSubscribe = mUserManager.getUserData()
+        mSubscribe = mUserManager.getUserData(idEvento)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -70,7 +70,7 @@ public class NFCPresenter  {
 
     public void writeNFCCard(String value, String name, String cpf, String numberTag, String cellPhone, String active, String idEvento) {
 
-        UserData userData = new UserData(Utils.adicionaAsterisco(value), Utils.adicionaAsterisco(name), Utils.adicionaAsterisco(cpf), Utils.adicionaAsterisco(numberTag), Utils.adicionaAsterisco(cellPhone), Utils.adicionaAsterisco(active));
+        UserData userData = new UserData(Utils.adicionaAsterisco(value), Utils.adicionaAsterisco(name), Utils.adicionaAsterisco(cpf), Utils.adicionaAsterisco(numberTag), Utils.adicionaAsterisco(cellPhone), Utils.adicionaAsterisco(active), Utils.adicionaAsterisco(idEvento));
 
         mSubscribe = mUseCase.controlLed(new PlugPagLedData(PlugPagLedData.LED_BLUE))
                 .subscribeOn(Schedulers.io())
@@ -123,9 +123,20 @@ public class NFCPresenter  {
                 );
     }
 
+    public void showSuccessDebit(Integer res) {
+
+        mSubscribe = mUseCase.controlLed(new PlugPagLedData(PlugPagLedData.LED_GREEN))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        result -> mFragment.showSuccessReWrite(res),
+                        throwable -> mFragment.showErrorReWrite(throwable.getMessage())
+                );
+    }
+
     public void reWriteNFCCard(String value, String idEvento) {
 
-        UserData userData = new UserData(Utils.adicionaAsterisco(value), null, null, null, null, null);
+        UserData userData = new UserData(Utils.adicionaAsterisco(value), null, null, null, null, null, Utils.adicionaAsterisco(idEvento));
 
         mSubscribe = mUseCase.controlLed(new PlugPagLedData(PlugPagLedData.LED_BLUE))
                 .subscribeOn(Schedulers.io())
@@ -135,6 +146,7 @@ public class NFCPresenter  {
                         throwable -> mFragment.showErrorReWrite(throwable.getMessage())
                 );
     }
+
 
     public void reWriteUserData(UserData userData) {
 
@@ -153,6 +165,35 @@ public class NFCPresenter  {
 
     }
 
+    public void debitNFCCard(String idEvento, String value) {
+
+        UserData userData = new UserData(Utils.adicionaAsterisco(value), null, null, null, null, null, Utils.adicionaAsterisco(idEvento));
+
+        mSubscribe = mUseCase.controlLed(new PlugPagLedData(PlugPagLedData.LED_BLUE))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        result -> debitUserData(userData),
+                        throwable -> mFragment.showErrorDebitNfc(throwable.getMessage())
+                );
+    }
+
+    public void debitUserData(UserData userData) {
+
+        mSubscribe = mUserManager.debitUserData(userData)
+                .lastElement()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        result -> showSuccessDebit(result),
+                        throwable -> mFragment.showErrorDebitNfc(throwable.getMessage()),
+                        () -> {
+                            Log.d(NFCPresenter.class.getSimpleName(), "writeUser finished");
+                            // mView.onWriteNfcSuccessful();
+                        }
+                );
+    }
+
     public void formatNFCCard() {
 
         // using ArrayList to have no block limit
@@ -162,17 +203,45 @@ public class NFCPresenter  {
                 NFCConstants.CPF_BLOCK,
                 NFCConstants.TAG_BLOCK,
                 NFCConstants.CELL_PHONE_BLOCK,
-                NFCConstants.CARD_OPENED_BLOCK
+                NFCConstants.CARD_OPENED_BLOCK,
+                NFCConstants.EVENT_ID_BLOCK
         );
+
+
+        mSubscribe = mUseCase.controlLed(new PlugPagLedData(PlugPagLedData.LED_BLUE))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        result -> clearBlocks(blocks),
+                        throwable -> mFragment.showErrorReWrite(throwable.getMessage())
+                );
+    }
+
+    public void clearBlocks(List<Integer> blocks) {
+
         mSubscribe = mUseCase.clearBlocks(blocks)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .distinct()
                 .subscribe(
-                        result -> mFragment.showSuccessFormat(result),
+                        result -> showSuccessFormat(result),
                         throwable -> mFragment.showErrorFormat(throwable.getMessage())
                         //mView::onBlockCleanSuccessful
                 );
+
+    }
+
+
+    public void showSuccessFormat(Integer res) {
+
+        mSubscribe = mUseCase.controlLed(new PlugPagLedData(PlugPagLedData.LED_GREEN))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        result -> mFragment.showSuccessFormat(res),
+                        throwable -> mFragment.showErrorReWrite(throwable.getMessage())
+                );
+
 
     }
 

@@ -12,12 +12,14 @@ public class UserData implements Serializable {
     private String numberTag;
     private String cellPhone;
     private String active;
+    private String idEvento;
+
 
 
     public UserData() {
     }
 
-    public UserData(String value, String name, String cpf, String numberTag, String cellPhone, String active) {
+    public UserData(String value, String name, String cpf, String numberTag, String cellPhone, String active, String idEvento) {
 
         this.value = value;
         this.name = name;
@@ -25,6 +27,7 @@ public class UserData implements Serializable {
         this.numberTag = numberTag;
         this.cellPhone = cellPhone;
         this.active = active;
+        this.idEvento = idEvento;
 
     }
 
@@ -60,8 +63,6 @@ public class UserData implements Serializable {
         this.numberTag = numberTag;
     }
 
-
-
     public String getCellPhone() {
         return cellPhone;
     }
@@ -70,7 +71,8 @@ public class UserData implements Serializable {
         this.cellPhone = cellPhone;
     }
 
-    public String getActive() {
+    public String getActive()
+    {
         return active;
     }
 
@@ -78,7 +80,13 @@ public class UserData implements Serializable {
         this.active = active;
     }
 
+    public String getIdEvento() {
+        return idEvento;
+    }
 
+    public void setIdEvento(String idEvento) {
+        this.idEvento = idEvento;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -90,13 +98,14 @@ public class UserData implements Serializable {
                 Objects.equals(getCpf(), nfcData.getCpf()) &&
                 Objects.equals(getNumberTag(), nfcData.getNumberTag()) &&
                 Objects.equals(getCellPhone(), nfcData.getCellPhone()) &&
-                Objects.equals(getActive(), nfcData.getActive());
+                Objects.equals(getActive(), nfcData.getActive()) &&
+                Objects.equals(getIdEvento(), nfcData.getIdEvento());
 
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getValue(), getName(), getCpf(), getNumberTag(), getCellPhone(), getActive());
+        return Objects.hash(getValue(), getName(), getCpf(), getNumberTag(), getCellPhone(), getActive(), getIdEvento());
     }
 
     @Override
@@ -108,6 +117,7 @@ public class UserData implements Serializable {
                 ", numberTag='" + numberTag + '\'' +
                 ", cellPhone='" + cellPhone + '\'' +
                 ", active='" + active + '\'' +
+                ", idEvento='" + idEvento + '\'' +
                 '}';
     }
 }

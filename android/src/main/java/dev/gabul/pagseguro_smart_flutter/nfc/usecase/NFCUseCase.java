@@ -131,6 +131,23 @@ public class NFCUseCase {
                     return;
                 }
 
+              /*  if(cardData.getSlot() == NFCConstants.EVENT_ID_BLOCK) {
+
+                    String idEventoCard = Utils.removeAsterisco(new String(resultRead.getSlots()[cardData.getSlot()].get("data")));
+
+                    System.out.println("idEventoCard");
+                    System.out.println(idEventoCard);
+
+
+
+                    if(!idEventoCard.equals(new String(cardData.getValue()))) {
+                        mPlugPag.setLed(new PlugPagLedData(PlugPagLedData.LED_RED));
+                        emitter.onError(new PlugPagException(String.format("evento_nao_compativel", cardData.getSlot())));
+                        emitter.onComplete();
+                        return;
+                    }
+                } */
+
                 //Soma valor atual com o valor de recarga
                 Double valorAtual = Double.parseDouble(Utils.removeAsterisco(new String(resultRead.getSlots()[cardData.getSlot()].get("data"))));
                 Double valorRecarga = Double.parseDouble(Utils.removeAsterisco(new String(cardData.getValue())));
@@ -157,7 +174,98 @@ public class NFCUseCase {
         });
     }
 
-    public Observable<PlugPagNFCResult> readNfc(Integer block){
+    public Observable<Integer> debitNfc(PlugPagSimpleNFCData cardData) {
+        return Observable.create(emitter -> {
+            try {
+
+                int resultStartNfc = mPlugPag.startNFCCardDirectly();
+                if (resultStartNfc != 1) {
+                    emitter.onError(new PlugPagException("Ocorreu um erro ao iniciar serviço nfc"));
+                    emitter.onComplete();
+                    return;
+                }
+
+                PlugPagNFCAuth auth = new PlugPagNFCAuth(PlugPagNearFieldCardData.ONLY_M, (byte) cardData.getSlot(), MifareClassic.KEY_DEFAULT);
+                int resultAuth = mPlugPag.authNFCCardDirectly(auth);
+                if (resultAuth != 1) {
+
+                    mPlugPag.setLed(new PlugPagLedData(PlugPagLedData.LED_RED));
+                    emitter.onError(new PlugPagException(String.format("Erro ao autenticar bloco [ %s ]", cardData.getSlot())));
+                    emitter.onComplete();
+                    return;
+                }
+
+                PlugPagSimpleNFCData readCardData = new PlugPagSimpleNFCData(PlugPagNearFieldCardData.ONLY_M, cardData.getSlot(), MifareClassic.KEY_DEFAULT);
+                PlugPagNFCResult resultRead = mPlugPag.readNFCCardDirectly(readCardData);
+
+                if (resultRead.getResult() == 1) {
+
+                } else {
+
+                    mPlugPag.setLed(new PlugPagLedData(PlugPagLedData.LED_RED));
+                    emitter.onError(new PlugPagException(String.format("Ocoreu um erro ao ler bloco [ %s ] do cartão nfc", cardData.getSlot())));
+                    emitter.onComplete();
+                    return;
+                }
+
+              /*  if(cardData.getSlot() == NFCConstants.EVENT_ID_BLOCK) {
+
+                    String idEventoCard = Utils.removeAsterisco(new String(resultRead.getSlots()[cardData.getSlot()].get("data")));
+
+                    System.out.println("idEventoCard");
+                    System.out.println(idEventoCard);
+
+
+
+                    if(!idEventoCard.equals(new String(cardData.getValue()))) {
+                        mPlugPag.setLed(new PlugPagLedData(PlugPagLedData.LED_RED));
+                        emitter.onError(new PlugPagException(String.format("evento_nao_compativel", cardData.getSlot())));
+                        emitter.onComplete();
+                        return;
+                    }
+                } */
+
+                //Soma valor atual com o valor de recarga
+
+                Double valorAtual = Double.parseDouble(Utils.removeAsterisco(new String(resultRead.getSlots()[cardData.getSlot()].get("data"))));
+                Double valorProdutos = Double.parseDouble(Utils.removeAsterisco(new String(cardData.getValue())));
+                Double novoSaldo = 0.00;
+                if(valorAtual < valorProdutos) {
+
+                    mPlugPag.setLed(new PlugPagLedData(PlugPagLedData.LED_RED));
+                    emitter.onError(new PlugPagException(String.format("saldo_insuficiente", cardData.getSlot())));
+                    emitter.onComplete();
+                    return;
+
+                } else {
+
+                    novoSaldo = (valorAtual - valorProdutos);
+                }
+
+                String valorNovoString = Utils.adicionaAsterisco(novoSaldo.toString());
+                cardData.setValue(valorNovoString.getBytes());
+
+                Integer result = mPlugPag.writeToNFCCardDirectly(cardData);
+
+                if (result == 1) {
+                    emitter.onNext(result);
+                } else {
+                    emitter.onError(new PlugPagException(String.format("Ocorreu um erro ao escrever no bloco [ %s ]  do cartão nfc", cardData.getSlot())));
+                }
+
+
+                mPlugPag.stopNFCCardDirectly();
+            } catch (Exception e){
+                e.printStackTrace();
+                emitter.onError(e);
+            }
+
+            emitter.onComplete();
+        });
+    }
+
+
+    public Observable<PlugPagNFCResult> readNfc(Integer block, String idEvento){
         return Observable.create(emitter -> {
             int resultStartNfc = mPlugPag.startNFCCardDirectly();
             if (resultStartNfc != 1){
@@ -165,8 +273,6 @@ public class NFCUseCase {
                 emitter.onComplete();
                 return;
             }
-
-
 
             PlugPagNFCAuth auth = new PlugPagNFCAuth(PlugPagNearFieldCardData.ONLY_M, block.byteValue(), MifareClassic.KEY_DEFAULT);
             int resultAuth = mPlugPag.authNFCCardDirectly(auth);
@@ -179,6 +285,18 @@ public class NFCUseCase {
             PlugPagSimpleNFCData cardData = new PlugPagSimpleNFCData(PlugPagNearFieldCardData.ONLY_M, block, MifareClassic.KEY_DEFAULT);
 
             PlugPagNFCResult result = mPlugPag.readNFCCardDirectly(cardData);
+
+            if(block.equals(NFCConstants.EVENT_ID_BLOCK)) {
+
+                String idEventoCard = Utils.removeAsterisco(new String(result.getSlots()[block].get("data")));
+
+                if(!idEventoCard.equals(idEvento)) {
+                    mPlugPag.setLed(new PlugPagLedData(PlugPagLedData.LED_RED));
+                    emitter.onError(new PlugPagException(String.format("evento_nao_compativel", cardData.getSlot())));
+                    emitter.onComplete();
+                    return;
+                }
+            }
 
             if (result.getResult() == 1){
                 Log.d(NFCUseCase.class.getSimpleName(), Utils.convertBytes2String(result.getSlots()[result.getStartSlot()].get("data"), false));

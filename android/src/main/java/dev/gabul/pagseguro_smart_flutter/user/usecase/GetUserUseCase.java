@@ -23,9 +23,10 @@ public class GetUserUseCase {
         this.mNFCUseCase = nfcUseCase;
     }
 
-    public Single<UserData> getUser() {
+    public Single<UserData> getUser(String idEvento) {
         // List Of Observables for concatenate
         final List<Observable<Pair<UserFieldEnum, String>>> observableSources = Arrays.asList(
+                readEventIdFromNfc(idEvento),
                 readValueFromNfc(),
                 readNameFromNfc(),
                 readCpfFromNfc(),
@@ -47,38 +48,44 @@ public class GetUserUseCase {
     }
 
     private Observable<Pair<UserFieldEnum, String>> readValueFromNfc(){
-        return mNFCUseCase.readNfc(NFCConstants.VALUE_BLOCK).map(
+        return mNFCUseCase.readNfc(NFCConstants.VALUE_BLOCK, null).map(
                 result -> new Pair<>(UserFieldEnum.VALUE, getStringFromResult(result))
         );
     }
 
     private Observable<Pair<UserFieldEnum, String>> readNameFromNfc(){
-        return mNFCUseCase.readNfc(NFCConstants.NAME_BLOCK).map(
+        return mNFCUseCase.readNfc(NFCConstants.NAME_BLOCK, null).map(
                 result -> new Pair<>(UserFieldEnum.NAME, getStringFromResult(result))
         );
     }
 
     private Observable<Pair<UserFieldEnum, String>> readCpfFromNfc(){
-        return mNFCUseCase.readNfc(NFCConstants.CPF_BLOCK).map(
+        return mNFCUseCase.readNfc(NFCConstants.CPF_BLOCK, null).map(
                 result -> new Pair<>(UserFieldEnum.CPF, getStringFromResult(result))
         );
     }
 
     private Observable<Pair<UserFieldEnum, String>> readTagFromNfc(){
-        return mNFCUseCase.readNfc(NFCConstants.TAG_BLOCK).map(
+        return mNFCUseCase.readNfc(NFCConstants.TAG_BLOCK, null).map(
                 result -> new Pair<>(UserFieldEnum.TAG, getStringFromResult(result))
         );
     }
 
     private Observable<Pair<UserFieldEnum, String>> readCellPhoneFromNfc(){
-        return mNFCUseCase.readNfc(NFCConstants.CELL_PHONE_BLOCK).map(
+        return mNFCUseCase.readNfc(NFCConstants.CELL_PHONE_BLOCK, null).map(
                 result -> new Pair<>(UserFieldEnum.CELL_PHONE, getStringFromResult(result))
         );
     }
 
     private Observable<Pair<UserFieldEnum, String>> readCardActiveFromNfc(){
-        return mNFCUseCase.readNfc(NFCConstants.CARD_OPENED_BLOCK).map(
+        return mNFCUseCase.readNfc(NFCConstants.CARD_OPENED_BLOCK, null).map(
                 result -> new Pair<>(UserFieldEnum.CARD_OPENED, getStringFromResult(result))
+        );
+    }
+
+    private Observable<Pair<UserFieldEnum, String>> readEventIdFromNfc(String idEvento) {
+        return mNFCUseCase.readNfc(NFCConstants.EVENT_ID_BLOCK, idEvento).map(
+                result -> new Pair<>(UserFieldEnum.EVENT_ID, getStringFromResult(result))
         );
     }
 

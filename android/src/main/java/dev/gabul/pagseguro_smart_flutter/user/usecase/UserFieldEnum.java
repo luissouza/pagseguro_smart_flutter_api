@@ -7,7 +7,8 @@ public enum UserFieldEnum {
     CPF,
     TAG,
     CELL_PHONE,
-    CARD_OPENED
+    CARD_OPENED,
+    EVENT_ID
 
 }
 

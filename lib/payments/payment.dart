@@ -59,8 +59,8 @@ class Payment {
     return channel.invokeMethod(PaymentTypeCall.FORMAT_NFC.method);
   }
 
-  Future<bool> debitNfc(saldoAtual, valor) async {
-    return channel.invokeMethod(PaymentTypeCall.DEBIT_NFC.method, {"saldoAtual": saldoAtual, "valor": valor});
+  Future<bool> debitNfc(idEvento, valor) async {
+    return channel.invokeMethod(PaymentTypeCall.DEBIT_NFC.method, {"idEvento": idEvento, "valor": valor});
   }
 
   Future<dynamic> _callHandler(MethodCall call) async {

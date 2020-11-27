@@ -34,11 +34,13 @@ public class PagSeguroSmart {
      private static final String PAYMENT_ABORT = "paymentAbort";
      private static final String LAST_TRANSACTION = "paymentLastTransaction";
      private static final String REFUND = "paymentRefund";
+
      //NFC
      private static final String WRITE_NFC = "paymentWriteNfc";
      private static final String READ_NFC = "paymentReadNfc";
      private static final String FORMAT_NFC = "paymentFormatNfc";
      private static final String REWRITE_NFC = "paymentReWriteNfc";
+     private static final String DEBIT_NFC = "paymentDebitNfc";
 
 
     public PagSeguroSmart(Context context, MethodChannel channel) {
@@ -104,9 +106,9 @@ public class PagSeguroSmart {
         else if(call.method.equals(FORMAT_NFC)) {
             this.nfcPayment.formatNFCCard();
         }
-//        else if(call.method.equals(DEBIT_NFC)) {
-//            this.nfcPayment.debitNFCCard(call.argument("saldoAtual"),call.argument("valorProdutos"));
-//        }
+       else if(call.method.equals(DEBIT_NFC)) {
+           this.nfcPayment.debitNFCCard(call.argument("idEvento"),call.argument("valorProdutos"));
+        }
         else {
             result.notImplemented();
         }

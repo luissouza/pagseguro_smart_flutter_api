@@ -3,6 +3,7 @@ package dev.gabul.pagseguro_smart_flutter.managers;
 
 
 import dev.gabul.pagseguro_smart_flutter.user.UserData;
+import dev.gabul.pagseguro_smart_flutter.user.usecase.DebitUserUseCase;
 import dev.gabul.pagseguro_smart_flutter.user.usecase.EditUserUseCase;
 import dev.gabul.pagseguro_smart_flutter.user.usecase.GetUserUseCase;
 import dev.gabul.pagseguro_smart_flutter.user.usecase.NewUserUseCase;
@@ -14,6 +15,7 @@ public class UserDataManager {
     private GetUserUseCase mGetUser;
     private NewUserUseCase mNewUser;
     private EditUserUseCase mEditUser;
+    private DebitUserUseCase mDebitUser;
 
     public UserDataManager(GetUserUseCase getUser, NewUserUseCase newUser, EditUserUseCase mEditUser) {
         this.mGetUser = getUser;
@@ -21,8 +23,8 @@ public class UserDataManager {
         this.mEditUser = mEditUser;
     }
 
-    public Single<UserData> getUserData(){
-        return mGetUser.getUser();
+    public Single<UserData> getUserData(String idEvento){
+        return mGetUser.getUser(idEvento);
     }
 
     public Observable<Integer> writeUserData(UserData userData){
@@ -31,5 +33,9 @@ public class UserDataManager {
 
     public Observable<Integer> reWriteUserData(UserData userData){
         return mEditUser.reWriteUserInNFcCard(userData);
+    }
+
+    public Observable<Integer> debitUserData(UserData userData){
+        return mDebitUser.debitInNFcCard(userData);
     }
 }
