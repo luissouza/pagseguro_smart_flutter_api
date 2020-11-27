@@ -12,7 +12,6 @@ class Payment {
   Payment ({@required this.channel, @required this.paymentHandler}) {
     channel.setMethodCallHandler(_callHandler);
   }
-  //TYPES
 
   Future<bool> creditPayment(int value) async {
     return channel.invokeMethod(PaymentTypeCall.CREDIT.method, {"value": value});
