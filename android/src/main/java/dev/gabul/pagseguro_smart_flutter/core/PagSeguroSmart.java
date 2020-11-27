@@ -107,7 +107,7 @@ public class PagSeguroSmart {
             this.nfcPayment.formatNFCCard();
         }
        else if(call.method.equals(DEBIT_NFC)) {
-           this.nfcPayment.debitNFCCard(call.argument("idEvento"),call.argument("valorProdutos"));
+           this.nfcPayment.debitNFCCard(call.argument("idEvento"),call.argument("valor"));
         }
         else {
             result.notImplemented();
