@@ -61,7 +61,8 @@ public class PagSeguroSmart {
             mUserManager = new UserDataManager(
                     new GetUserUseCase(mUseCase),
                     new NewUserUseCase(mUseCase),
-                    new EditUserUseCase(mUseCase)
+                    new EditUserUseCase(mUseCase),
+                    new DebitUserUseCase(mUseCase)
             );
 
             this.nfcPayment = new NFCPresenter(mFragment, mUseCase, mUserManager);
