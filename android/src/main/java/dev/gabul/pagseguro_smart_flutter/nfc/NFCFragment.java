@@ -69,8 +69,8 @@ public class NFCFragment implements NFCContract {
     }
 
     @Override
-    public void showSuccessDebitNfc(PlugPagNFCResult result) {
-        this.channel.invokeMethod(ON_SUCCESS_DEBIT_NFC, result.getResult());
+    public void showSuccessDebitNfc(Object result) {
+        this.channel.invokeMethod(ON_SUCCESS_DEBIT_NFC, result);
     }
 
     //Error methods

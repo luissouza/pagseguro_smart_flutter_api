@@ -8,6 +8,7 @@ import dev.gabul.pagseguro_smart_flutter.nfc.NFCFragment;
 import dev.gabul.pagseguro_smart_flutter.nfc.NFCPresenter;
 import dev.gabul.pagseguro_smart_flutter.nfc.usecase.NFCUseCase;
 import dev.gabul.pagseguro_smart_flutter.payments.PaymentsPresenter;
+import dev.gabul.pagseguro_smart_flutter.user.usecase.DebitUserUseCase;
 import dev.gabul.pagseguro_smart_flutter.user.usecase.EditUserUseCase;
 import dev.gabul.pagseguro_smart_flutter.user.usecase.GetUserUseCase;
 import dev.gabul.pagseguro_smart_flutter.user.usecase.NewUserUseCase;

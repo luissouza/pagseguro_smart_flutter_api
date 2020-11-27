@@ -129,8 +129,8 @@ public class NFCPresenter  {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        result -> mFragment.showSuccessReWrite(res),
-                        throwable -> mFragment.showErrorReWrite(throwable.getMessage())
+                        result -> mFragment.showSuccessDebitNfc(res),
+                        throwable -> mFragment.showErrorDebitNfc(throwable.getMessage())
                 );
     }
 

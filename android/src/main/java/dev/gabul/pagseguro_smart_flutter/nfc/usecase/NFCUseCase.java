@@ -290,12 +290,15 @@ public class NFCUseCase {
 
                 String idEventoCard = Utils.removeAsterisco(new String(result.getSlots()[block].get("data")));
 
-                if(!idEventoCard.equals(idEvento)) {
-                    mPlugPag.setLed(new PlugPagLedData(PlugPagLedData.LED_RED));
-                    emitter.onError(new PlugPagException(String.format("evento_nao_compativel", cardData.getSlot())));
-                    emitter.onComplete();
-                    return;
+                if(idEventoCard.getBytes() != new byte[16]) {
+                    if(!idEventoCard.equals(idEvento)) {
+                        mPlugPag.setLed(new PlugPagLedData(PlugPagLedData.LED_RED));
+                        emitter.onError(new PlugPagException(String.format("evento_nao_compativel", cardData.getSlot())));
+                        emitter.onComplete();
+                        return;
+                    }
                 }
+
             }
 
             if (result.getResult() == 1){
@@ -343,6 +346,7 @@ public class NFCUseCase {
                 }
 
                 mPlugPag.stopNFCCardDirectly();
+
             } catch (Exception e){
                 e.printStackTrace();
                 emitter.onError(e);
@@ -372,7 +376,8 @@ public class NFCUseCase {
 
     public Observable<Integer> clearBlocks(List<Integer> blocks) {
         return Observable.create((ObservableOnSubscribe<Integer>) emitter -> {
-            for (Integer trailerBlock : getSectorTrailerBlocks()){
+
+            for (Integer trailerBlock : getSectorTrailerBlocks()) {
                 if (blocks.contains(trailerBlock)){
                     emitter.onError(new PlugPagException(String.format("O bloco [ %s ] é de permissão de acesso e não pode ser limpo!", trailerBlock)));
                     emitter.onComplete();

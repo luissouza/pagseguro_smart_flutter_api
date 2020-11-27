@@ -11,7 +11,7 @@ public interface NFCContract  {
     void showSuccessWrite(Object result);
     void showSuccessReWrite(Object result);
     void showSuccessFormat(Object result);
-    void showSuccessDebitNfc(PlugPagNFCResult result);
+    void showSuccessDebitNfc(Object result);
 
     //Error
     void showErrorRead(String message);
