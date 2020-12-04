@@ -14,11 +14,14 @@ enum PaymentTypeHandler {
   SHOW_SUCCESS_RE_WRITE,
   SHOW_SUCCESS_FORMAT,
   SHOW_SUCCESS_DEBIT_NFC,
+  SHOW_SUCCESS_REFUND_NFC,
   SHOW_ERROR_READ,
   SHOW_ERROR_WRITE,
   SHOW_ERROR_RE_WRITE,
   SHOW_ERROR_FORMAT,
-  SHOW_ERROR_DEBIT_NFC
+  SHOW_ERROR_DEBIT_NFC,
+  SHOW_ERROR_REFUND_NFC,
+  
 }
 
 extension StringPaymentHandlerExt on String {
@@ -54,6 +57,8 @@ extension StringPaymentHandlerExt on String {
         return PaymentTypeHandler.SHOW_SUCCESS_FORMAT;
       case "showSuccessDebitNfc":
         return PaymentTypeHandler.SHOW_SUCCESS_DEBIT_NFC;  
+      case "showSuccessRefundNfc":
+        return PaymentTypeHandler.SHOW_SUCCESS_REFUND_NFC;    
       case "showErrorRead":
         return PaymentTypeHandler.SHOW_ERROR_READ;  
       case "showErrorWrite":
@@ -63,9 +68,9 @@ extension StringPaymentHandlerExt on String {
       case "showErrorFormat":
         return PaymentTypeHandler.SHOW_ERROR_FORMAT;  
       case "showErrorDebitNfc":
-        return PaymentTypeHandler.SHOW_ERROR_DEBIT_NFC;        
-
-
+        return PaymentTypeHandler.SHOW_ERROR_DEBIT_NFC;
+      case "showErrorRefundNfc":
+        return PaymentTypeHandler.SHOW_ERROR_REFUND_NFC;   
       default:
         throw "NOT IMPLEMENTED";
     }
@@ -105,6 +110,8 @@ extension PaymentTypeHandlerExt on PaymentTypeHandler {
         return "showSuccessFormat";
       case PaymentTypeHandler.SHOW_SUCCESS_DEBIT_NFC:
         return "showSuccessDebitNfc";
+      case PaymentTypeHandler.SHOW_SUCCESS_REFUND_NFC:
+        return "showSuccessRefundNfc";
       case PaymentTypeHandler.SHOW_ERROR_READ:
         return "showErrorRead";
       case PaymentTypeHandler.SHOW_ERROR_WRITE:
@@ -113,8 +120,10 @@ extension PaymentTypeHandlerExt on PaymentTypeHandler {
         return "showErrorReWrite";
       case PaymentTypeHandler.SHOW_ERROR_FORMAT:
         return "showErrorFormat";
-      case PaymentTypeHandler.SHOW_SUCCESS_DEBIT_NFC:
+      case PaymentTypeHandler.SHOW_ERROR_DEBIT_NFC:
         return "showErrorDebitNfc";
+      case PaymentTypeHandler.SHOW_ERROR_REFUND_NFC:
+        return "showErrorRefundNfc";
     }
   }
 }
@@ -130,6 +139,7 @@ enum PaymentTypeCall {
   READ_NFC,
   WRITE_NFC,
   REWRITE_NFC,
+  REFUND_NFC,
   DEBIT_NFC,
   FORMAT_NFC
 }
@@ -174,6 +184,8 @@ extension PaymentTypeCallExt on PaymentTypeCall {
         return "paymentDebitNfc";
       case PaymentTypeCall.FORMAT_NFC:
         return "paymentFormatNfc";
+      case PaymentTypeCall.REFUND_NFC:
+        return "paymentReFundNfc";
     }
   }
 }

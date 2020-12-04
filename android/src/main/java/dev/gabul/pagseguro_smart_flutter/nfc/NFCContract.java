@@ -12,6 +12,7 @@ public interface NFCContract  {
     void showSuccessReWrite(Object result);
     void showSuccessFormat(Object result);
     void showSuccessDebitNfc(Object result);
+    void showSuccessRefundNfc(Object result);
 
     //Error
     void showErrorRead(String message);
@@ -19,6 +20,7 @@ public interface NFCContract  {
     void showErrorReWrite(String message);
     void showErrorFormat(String message);
     void showErrorDebitNfc(String message);
+    void showErrorRefundNfc(String message);
     void showError(String message);
 
     void onReadCard();

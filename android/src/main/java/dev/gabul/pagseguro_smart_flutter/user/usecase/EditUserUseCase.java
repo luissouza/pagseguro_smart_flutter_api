@@ -23,14 +23,14 @@ public class EditUserUseCase {
         this.mNfcUseCase = nfcUseCase;
     }
 
-    public Observable<Integer> reWriteUserInNFcCard(UserData userData){
+    public Observable<String> reWriteUserInNFcCard(UserData userData){
 
-        final List<Observable<Integer>> observableSources = Arrays.asList(
+        final List<Observable<String>> observableSources = Arrays.asList(
 
-                reWriteValueInNfcCard(userData)
+                reWriteValueInNfcCard(userData),
 //                writeNameInNfcCard(userData),
 //                writeCpfInNfcCard(userData),
-//                writeTagInNfcCard(userData),
+                reWriteTagInNfcCard(userData)
 //                writeCellPhoneInNfcCard(userData),
 //                writeCardActiveInNfcCard(userData)
 
@@ -39,8 +39,12 @@ public class EditUserUseCase {
         return Observable.concat(observableSources);
     }
 
-    private Observable<Integer> reWriteValueInNfcCard(UserData userData){
+    private Observable<String> reWriteValueInNfcCard(UserData userData){
         return mNfcUseCase.reWriteNfc(buildCardData(NFCConstants.VALUE_BLOCK, userData.getValue()));
+    }
+
+    private Observable<String> reWriteTagInNfcCard(UserData userData){
+        return mNfcUseCase.reWriteNfc(buildCardData(NFCConstants.TAG_BLOCK, userData.getValue()));
     }
 
 //    private Observable<Integer> writeNameInNfcCard(UserData userData){

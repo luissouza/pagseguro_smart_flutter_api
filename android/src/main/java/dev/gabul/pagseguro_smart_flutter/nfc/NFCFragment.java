@@ -77,6 +77,7 @@ public class NFCFragment implements NFCContract {
     @Override
     public void showErrorRead(String message) {
         this.channel.invokeMethod(ON_ERROR_READ, message);
+
     }
 
     @Override

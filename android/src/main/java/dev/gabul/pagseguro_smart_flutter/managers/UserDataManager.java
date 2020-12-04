@@ -7,6 +7,7 @@ import dev.gabul.pagseguro_smart_flutter.user.usecase.DebitUserUseCase;
 import dev.gabul.pagseguro_smart_flutter.user.usecase.EditUserUseCase;
 import dev.gabul.pagseguro_smart_flutter.user.usecase.GetUserUseCase;
 import dev.gabul.pagseguro_smart_flutter.user.usecase.NewUserUseCase;
+import dev.gabul.pagseguro_smart_flutter.user.usecase.RefundUserUseCase;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
@@ -15,6 +16,7 @@ public class UserDataManager {
     private GetUserUseCase mGetUser;
     private NewUserUseCase mNewUser;
     private EditUserUseCase mEditUser;
+    private RefundUserUseCase mRefundUser;
     private DebitUserUseCase mDebitUser;
 
     public UserDataManager(GetUserUseCase getUser, NewUserUseCase newUser, EditUserUseCase mEditUser, DebitUserUseCase mDebitUser) {
@@ -32,11 +34,15 @@ public class UserDataManager {
         return mNewUser.writeUserInNFcCard(userData);
     }
 
-    public Observable<Integer> reWriteUserData(UserData userData){
+    public Observable<String> reWriteUserData(UserData userData){
         return mEditUser.reWriteUserInNFcCard(userData);
     }
 
-    public Observable<Integer> debitUserData(UserData userData){
+    public Observable<String> reFundUserData(UserData userData){
+        return mRefundUser.reFundUserInNFcCard(userData);
+    }
+
+    public Observable<String> debitUserData(UserData userData){
         return mDebitUser.debitInNFcCard(userData);
     }
 }

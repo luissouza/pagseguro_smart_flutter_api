@@ -26,12 +26,12 @@ public class GetUserUseCase {
     public Single<UserData> getUser(String idEvento) {
         // List Of Observables for concatenate
         final List<Observable<Pair<UserFieldEnum, String>>> observableSources = Arrays.asList(
-                readEventIdFromNfc(idEvento),
+               // readEventIdFromNfc(idEvento),
                 readValueFromNfc(),
-                readNameFromNfc(),
-                readCpfFromNfc(),
+               // readNameFromNfc(),
+               // readCpfFromNfc(),
                 readTagFromNfc(),
-                readCellPhoneFromNfc(),
+               // readCellPhoneFromNfc(),
                 readCardActiveFromNfc()
 
         );

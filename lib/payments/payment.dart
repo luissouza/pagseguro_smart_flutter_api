@@ -54,6 +54,10 @@ class Payment {
     return channel.invokeMethod(PaymentTypeCall.REWRITE_NFC.method, {"valor": valor, "idEvento": idEvento});
   }
 
+  Future<bool> refundNfc(valor, idEvento) async {
+    return channel.invokeMethod(PaymentTypeCall.REWRITE_NFC.method, {"valor": valor, "idEvento": idEvento});
+  }
+
   Future<bool> formatNfc() async {
     return channel.invokeMethod(PaymentTypeCall.FORMAT_NFC.method);
   }
@@ -144,6 +148,12 @@ class Payment {
         }
         break;
 
+      case PaymentTypeHandler.SHOW_SUCCESS_REFUND_NFC:
+        {
+          paymentHandler.showSuccessRefundNfc(call.arguments);
+        }
+        break;
+
       case PaymentTypeHandler.SHOW_SUCCESS_FORMAT:
         {
           paymentHandler.showSuccessFormat(call.arguments);
@@ -177,6 +187,12 @@ class Payment {
       case PaymentTypeHandler.SHOW_ERROR_DEBIT_NFC:
         {
           paymentHandler.showErrorDebitNfc(call.arguments);
+        }
+        break;
+
+      case PaymentTypeHandler.SHOW_ERROR_REFUND_NFC:
+        {
+          paymentHandler.showErrorRefundNfc(call.arguments);
         }
         break;
 

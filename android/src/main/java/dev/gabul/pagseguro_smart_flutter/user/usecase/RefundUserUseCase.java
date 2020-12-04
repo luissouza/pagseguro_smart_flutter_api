@@ -15,22 +15,22 @@ import dev.gabul.pagseguro_smart_flutter.nfc.usecase.NFCUseCase;
 import dev.gabul.pagseguro_smart_flutter.user.UserData;
 import io.reactivex.Observable;
 
-public class DebitUserUseCase {
+public class RefundUserUseCase {
 
     private final NFCUseCase mNfcUseCase;
 
-    public DebitUserUseCase(NFCUseCase nfcUseCase) {
+    public RefundUserUseCase(NFCUseCase nfcUseCase) {
         this.mNfcUseCase = nfcUseCase;
     }
 
-    public Observable<String> debitInNFcCard(UserData userData){
+    public Observable<String> reFundUserInNFcCard(UserData userData) {
 
         final List<Observable<String>> observableSources = Arrays.asList(
 
-                debitValueInNfcCard(userData),
+                reFundValueInNfcCard(userData),
 //                writeNameInNfcCard(userData),
 //                writeCpfInNfcCard(userData),
-                debitTagInNfcCard(userData)
+                reFundTagInNfcCard(userData)
 //                writeCellPhoneInNfcCard(userData),
 //                writeCardActiveInNfcCard(userData)
 
@@ -39,12 +39,12 @@ public class DebitUserUseCase {
         return Observable.concat(observableSources);
     }
 
-    private Observable<String> debitValueInNfcCard(UserData userData) {
-        return mNfcUseCase.debitNfc(buildCardData(NFCConstants.VALUE_BLOCK, userData.getValue()));
+    private Observable<String> reFundValueInNfcCard(UserData userData){
+        return mNfcUseCase.reFundNfc(buildCardData(NFCConstants.VALUE_BLOCK, userData.getValue()));
     }
 
-       private Observable<String> debitTagInNfcCard(UserData userData) {
-        return mNfcUseCase.debitNfc(buildCardData(NFCConstants.TAG_BLOCK, ""));
+    private Observable<String> reFundTagInNfcCard(UserData userData){
+        return mNfcUseCase.reFundNfc(buildCardData(NFCConstants.TAG_BLOCK, userData.getValue()));
     }
 
 //    private Observable<Integer> writeNameInNfcCard(UserData userData){
@@ -56,7 +56,9 @@ public class DebitUserUseCase {
 //    }
 //
 //
-
+//    private Observable<Integer> writeTagInNfcCard(UserData userData){
+//        return mNfcUseCase.writeNfc(buildCardData(NFCConstants.TAG_BLOCK, userData.getNumberTag()));
+//    }
 //
 //    private Observable<Integer> writeCellPhoneInNfcCard(UserData userData){
 //        return mNfcUseCase.writeNfc(buildCardData(NFCConstants.CELL_PHONE_BLOCK, userData.getCellPhone()));
