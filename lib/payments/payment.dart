@@ -55,7 +55,7 @@ class Payment {
   }
 
   Future<bool> refundNfc(valor, idEvento) async {
-    return channel.invokeMethod(PaymentTypeCall.REWRITE_NFC.method, {"valor": valor, "idEvento": idEvento});
+    return channel.invokeMethod(PaymentTypeCall.REFUND_NFC.method, {"valor": valor, "idEvento": idEvento});
   }
 
   Future<bool> formatNfc() async {
