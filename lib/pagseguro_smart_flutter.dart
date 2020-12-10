@@ -27,7 +27,7 @@ class PagseguroSmart {
   }
 
   void initNfc(NfcHandler handler) {
-    _nfc = Nfc(channel: _channel, paymentHandler: handler);
+    _nfc = Nfc(channel: _channel, nfcHandler: handler);
   }
 
   Payment get payment {
