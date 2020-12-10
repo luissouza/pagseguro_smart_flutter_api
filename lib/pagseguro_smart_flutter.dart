@@ -8,6 +8,7 @@ import 'package:pagseguro_smart_flutter/payments/payment.dart';
 class PagseguroSmart {
   final MethodChannel _channel;
   Payment _payment;
+  Nfc _nfc;
 
   static PagseguroSmart _instance;
 
