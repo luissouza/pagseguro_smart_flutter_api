@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:pagseguro_smart_flutter/payments/handler/nfc_handler.dart';
 import 'package:pagseguro_smart_flutter/payments/utils/payment_types.dart';
 
-const CHANNEL_NAME = "pagseguro_smart_flutter";
+const CHANNEL_NFC_NAME = "pagseguro_smart_flutter";
 
 class Nfc {
   final MethodChannel channel;

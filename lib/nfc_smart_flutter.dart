@@ -16,7 +16,7 @@ class NfcSmart {
 
   static NfcSmart instance() {
     if (_instance == null) {
-      _instance = NfcSmart(MethodChannel(CHANNEL_NAME));
+      _instance = NfcSmart(MethodChannel(CHANNEL_NFC_NAME));
     }
     return _instance;
   }
