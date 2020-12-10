@@ -51,7 +51,6 @@ public class NFCPresenter  {
                 .subscribe(
                         result -> {
                             showSuccessRead(result);
-                           // Thread.sleep(1000);
                             this.controlLed(new PlugPagLedData(PlugPagLedData.LED_OFF));
                         },
                         throwable -> {
@@ -310,7 +309,8 @@ public class NFCPresenter  {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         result -> {
-
+                           // System.out.println("dispose aqui");
+                           // mSubscribe.dispose();
                         }
                 );
     }

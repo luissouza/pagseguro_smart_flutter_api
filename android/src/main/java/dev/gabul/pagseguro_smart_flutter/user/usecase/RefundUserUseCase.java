@@ -27,10 +27,10 @@ public class RefundUserUseCase {
 
         final List<Observable<String>> observableSources = Arrays.asList(
 
-                reFundValueInNfcCard(userData),
+                reFundValueInNfcCard(userData)
 //                writeNameInNfcCard(userData),
 //                writeCpfInNfcCard(userData),
-                reFundTagInNfcCard(userData)
+//                reFundTagInNfcCard(userData)
 //                writeCellPhoneInNfcCard(userData),
 //                writeCardActiveInNfcCard(userData)
 

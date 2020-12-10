@@ -25,7 +25,7 @@ class PagseguroSmart {
   }
 
   void initNfc(NfcHandler handler) {
-    _payment = Nfc(channel: _channel, paymentHandler: handler);
+    _nfc = Nfc(channel: _channel, paymentHandler: handler);
   }
 
   Payment get payment {
@@ -33,5 +33,12 @@ class PagseguroSmart {
       throw "PAYMENT NEED INITIALIZE! \n TRY: PagseguroSmart._instance.initPayment(handler)";
     }
     return _payment;
+  }
+
+   Nfc get nfc {
+    if (_nfc == null) {
+      throw "NFC NEED INITIALIZE! \n TRY: PagseguroSmart._instance.initNfc(handler)";
+    }
+    return _nfc;
   }
 }

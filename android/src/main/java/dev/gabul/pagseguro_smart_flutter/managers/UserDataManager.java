@@ -19,11 +19,12 @@ public class UserDataManager {
     private RefundUserUseCase mRefundUser;
     private DebitUserUseCase mDebitUser;
 
-    public UserDataManager(GetUserUseCase getUser, NewUserUseCase newUser, EditUserUseCase mEditUser, DebitUserUseCase mDebitUser) {
+    public UserDataManager(GetUserUseCase getUser, NewUserUseCase newUser, EditUserUseCase mEditUser, DebitUserUseCase mDebitUser, RefundUserUseCase mRefundUser) {
         this.mGetUser = getUser;
         this.mNewUser = newUser;
         this.mEditUser = mEditUser;
         this.mDebitUser = mDebitUser;
+        this.mRefundUser = mRefundUser;
     }
 
     public Single<UserData> getUserData(String idEvento){

@@ -1,15 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:pagseguro_smart_flutter/payments/handler/payment_handler.dart';
+import 'package:pagseguro_smart_flutter/payments/handler/nfc_handler.dart';
 import 'package:pagseguro_smart_flutter/payments/utils/payment_types.dart';
 
 const CHANNEL_NAME = "pagseguro_smart_flutter";
 
 class Nfc {
   final MethodChannel channel;
-  final PaymentHandler paymentHandler;
+  final NfcHandler nfcHandler;
 
-  Nfc ({@required this.channel, @required this.paymentHandler}) {
+  Nfc ({@required this.channel, @required this.nfcHandler}) {
     channel.setMethodCallHandler(_callHandler);
   }
 
@@ -70,55 +70,55 @@ class Nfc {
     switch (call.method.handler) {
       case PaymentTypeHandler.ON_TRANSACTION_SUCCESS:
         {
-          paymentHandler.onTransactionSuccess();
+          nfcHandler.onTransactionSuccess();
         }
         break;
       case PaymentTypeHandler.ON_ERROR:
         {
-          paymentHandler.onError(call.arguments);
+          nfcHandler.onError(call.arguments);
         }
         break;
       case PaymentTypeHandler.ON_MESSAGE:
         {
-          paymentHandler.onMessage(call.arguments);
+          nfcHandler.onMessage(call.arguments);
         }
         break;
       case PaymentTypeHandler.ON_LOADING:
         {
-          paymentHandler.onLoading(call.arguments);
+          nfcHandler.onLoading(call.arguments);
         }
         break;
       case PaymentTypeHandler.WRITE_TO_FILE:
         {
-          paymentHandler.writeToFile(
+          nfcHandler.writeToFile(
               transactionCode: call.arguments['transactionCode'],
               transactionId: call.arguments['transactionId']);
         }
         break;
       case PaymentTypeHandler.ON_ABORTED_SUCCESSFULLY:
         {
-          paymentHandler.onAbortedSuccessfully();
+          nfcHandler.onAbortedSuccessfully();
         }
         break;
       case PaymentTypeHandler.DISPOSE_DIALOG:
         {
-          paymentHandler.disposeDialog();
+          nfcHandler.disposeDialog();
         }
         break;
       case PaymentTypeHandler.ACTIVE_DIALOG:
         {
-          paymentHandler.onActivationDialog();
+          nfcHandler.onActivationDialog();
         }
         break;
       case PaymentTypeHandler.ON_AUTH_PROGRESS:
         {
-          paymentHandler.onAuthProgress(call.arguments);
+          nfcHandler.onAuthProgress(call.arguments);
         }
         break;
 
       case PaymentTypeHandler.ON_TRANSACTION_INFO:
         {
-          paymentHandler.onTransactionInfo(
+          nfcHandler.onTransactionInfo(
               transactionCode: call.arguments['transactionCode'],
               transactionId: call.arguments['transactionId']);
         }
@@ -126,73 +126,73 @@ class Nfc {
 
       case PaymentTypeHandler.SHOW_SUCCESS:
         {
-          paymentHandler.showSuccess(call.arguments);
+          nfcHandler.showSuccess(call.arguments);
         }
         break;
 
       case PaymentTypeHandler.SHOW_SUCCESS_WRITE:
         {
-          paymentHandler.showSuccessWrite(call.arguments);
+          nfcHandler.showSuccessWrite(call.arguments);
         }
         break;
 
       case PaymentTypeHandler.SHOW_SUCCESS_RE_WRITE:
         {
-          paymentHandler.showSuccessReWrite(call.arguments);
+          nfcHandler.showSuccessReWrite(call.arguments);
         }
         break;
 
       case PaymentTypeHandler.SHOW_SUCCESS_DEBIT_NFC:
         {
-          paymentHandler.showSuccessDebitNfc(call.arguments);
+          nfcHandler.showSuccessDebitNfc(call.arguments);
         }
         break;
 
       case PaymentTypeHandler.SHOW_SUCCESS_REFUND_NFC:
         {
-          paymentHandler.showSuccessRefundNfc(call.arguments);
+          nfcHandler.showSuccessRefundNfc(call.arguments);
         }
         break;
 
       case PaymentTypeHandler.SHOW_SUCCESS_FORMAT:
         {
-          paymentHandler.showSuccessFormat(call.arguments);
+          nfcHandler.showSuccessFormat(call.arguments);
         }
         break;
 
       case PaymentTypeHandler.SHOW_ERROR_READ:
         {
-          paymentHandler.showErrorRead(call.arguments);
+          nfcHandler.showErrorRead(call.arguments);
         }
         break;
 
       case PaymentTypeHandler.SHOW_ERROR_WRITE:
         {
-          paymentHandler.showErrorWrite(call.arguments);
+          nfcHandler.showErrorWrite(call.arguments);
         }
         break;
 
       case PaymentTypeHandler.SHOW_ERROR_RE_WRITE:
         {
-          paymentHandler.showErrorReWrite(call.arguments);
+          nfcHandler.showErrorReWrite(call.arguments);
         }
         break;
 
       case PaymentTypeHandler.SHOW_ERROR_FORMAT:
         {
-          paymentHandler.showErrorFormat(call.arguments);
+          nfcHandler.showErrorFormat(call.arguments);
         }
         break;
 
       case PaymentTypeHandler.SHOW_ERROR_DEBIT_NFC:
         {
-          paymentHandler.showErrorDebitNfc(call.arguments);
+          nfcHandler.showErrorDebitNfc(call.arguments);
         }
         break;
 
       case PaymentTypeHandler.SHOW_ERROR_REFUND_NFC:
         {
-          paymentHandler.showErrorRefundNfc(call.arguments);
+          nfcHandler.showErrorRefundNfc(call.arguments);
         }
         break;
 

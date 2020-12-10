@@ -12,37 +12,39 @@ import dev.gabul.pagseguro_smart_flutter.user.usecase.DebitUserUseCase;
 import dev.gabul.pagseguro_smart_flutter.user.usecase.EditUserUseCase;
 import dev.gabul.pagseguro_smart_flutter.user.usecase.GetUserUseCase;
 import dev.gabul.pagseguro_smart_flutter.user.usecase.NewUserUseCase;
+import dev.gabul.pagseguro_smart_flutter.user.usecase.RefundUserUseCase;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
 public class PagSeguroSmart {
+
     private PlugPag plugPag;
     private MethodChannel mChannel;
     private NFCUseCase mUseCase;
     private NFCFragment mFragment;
     UserDataManager mUserManager;
 
-     //FUNCTIONS
-     PaymentsPresenter payment;
+    //FUNCTIONS
+    PaymentsPresenter payment;
 
-     NFCPresenter nfcPayment;
+    NFCPresenter nfcPayment;
 
-     //METHODS
-     private static final String PAYMENT_DEBIT = "paymentDebit";
-     private static final String PAYMENT_CREDIT = "paymentCredit";
-     private static final String PAYMENT_CREDIT_PARC = "paymentCreditParc";
-     private static final String PAYMENT_VOUCHER = "paymentVoucher";
-     private static final String PAYMENT_ABORT = "paymentAbort";
-     private static final String LAST_TRANSACTION = "paymentLastTransaction";
-     private static final String REFUND = "paymentRefund";
+    //METHODS
+    private static final String PAYMENT_DEBIT = "paymentDebit";
+    private static final String PAYMENT_CREDIT = "paymentCredit";
+    private static final String PAYMENT_CREDIT_PARC = "paymentCreditParc";
+    private static final String PAYMENT_VOUCHER = "paymentVoucher";
+    private static final String PAYMENT_ABORT = "paymentAbort";
+    private static final String LAST_TRANSACTION = "paymentLastTransaction";
+    private static final String REFUND = "paymentRefund";
 
-     //NFC
-     private static final String WRITE_NFC = "paymentWriteNfc";
-     private static final String READ_NFC = "paymentReadNfc";
-     private static final String FORMAT_NFC = "paymentFormatNfc";
-     private static final String REWRITE_NFC = "paymentReWriteNfc";
-     private static final String REFUND_NFC = "paymentReFundNfc";
-     private static final String DEBIT_NFC = "paymentDebitNfc";
+    //NFC
+    private static final String WRITE_NFC = "paymentWriteNfc";
+    private static final String READ_NFC = "paymentReadNfc";
+    private static final String FORMAT_NFC = "paymentFormatNfc";
+    private static final String REWRITE_NFC = "paymentReWriteNfc";
+    private static final String REFUND_NFC = "paymentReFundNfc";
+    private static final String DEBIT_NFC = "paymentDebitNfc";
 
 
     public PagSeguroSmart(Context context, MethodChannel channel) {
@@ -51,27 +53,31 @@ public class PagSeguroSmart {
     }
 
     public void initPayment(MethodCall call, MethodChannel.Result result) {
-        if(this.payment == null)
+        if(this.payment == null) {
             this.payment = new PaymentsPresenter(this.plugPag,this.mChannel);
             this.payment.dispose();
 
+        }
 
-        //if(this.nfcPayment == null)
+        mUseCase = new NFCUseCase(plugPag);
+        mFragment = new NFCFragment(mChannel);
+        mUserManager = new UserDataManager(
+                new GetUserUseCase(mUseCase),
+                new NewUserUseCase(mUseCase),
+                new EditUserUseCase(mUseCase),
+                new DebitUserUseCase(mUseCase),
+                new RefundUserUseCase(mUseCase)
+        );
 
-            mUseCase = new NFCUseCase(plugPag);
-            mFragment = new NFCFragment(mChannel);
-            mUserManager = new UserDataManager(
-                    new GetUserUseCase(mUseCase),
-                    new NewUserUseCase(mUseCase),
-                    new EditUserUseCase(mUseCase),
-                    new DebitUserUseCase(mUseCase)
-            );
-
+        //if(this.nfcPayment == null) {
+            System.out.println("DISPOSE MARDITO");
             this.nfcPayment = new NFCPresenter(mFragment, mUseCase, mUserManager);
             this.nfcPayment.dispose();
+        //}
+
 
         if(call.method.equals(PAYMENT_DEBIT)) {
-           this.payment.doDebitPayment(call.argument("value"));
+            this.payment.doDebitPayment(call.argument("value"));
 
         }
         else if(call.method.equals(PAYMENT_CREDIT)) {
@@ -86,7 +92,7 @@ public class PagSeguroSmart {
             this.payment.doVoucherPayment(call.argument("value"));
 
         }
-       else if(call.method.equals(PAYMENT_ABORT)) {
+        else if(call.method.equals(PAYMENT_ABORT)) {
             this.payment.abortTransaction();
             result.success(true);
         }
@@ -113,8 +119,8 @@ public class PagSeguroSmart {
         else if(call.method.equals(FORMAT_NFC)) {
             this.nfcPayment.formatNFCCard();
         }
-       else if(call.method.equals(DEBIT_NFC)) {
-           this.nfcPayment.debitNFCCard(call.argument("idEvento"),call.argument("valor"));
+        else if(call.method.equals(DEBIT_NFC)) {
+            this.nfcPayment.debitNFCCard(call.argument("idEvento"),call.argument("valor"));
         }
         else {
             result.notImplemented();
@@ -122,7 +128,7 @@ public class PagSeguroSmart {
     }
 
 
-   public void dispose(){
+    public void dispose(){
         if(this.payment != null){
             this.payment.dispose();
         }

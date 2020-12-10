@@ -22,6 +22,7 @@ public class NFCFragment implements NFCContract {
     private static final String ON_SUCCESS = "showSuccess";
     private static final String ON_SUCCESS_WRITE = "showSuccessWrite";
     private static final String ON_SUCCESS_RE_WRITE = "showSuccessReWrite";
+    private static final String ON_SUCCESS_REFUND_NFC = "showSuccessRefundNfc";
     private static final String ON_SUCCESS_FORMAT = "showSuccessFormat";
     private static final String ON_SUCCESS_DEBIT_NFC = "showSuccessDebitNfc";
 
@@ -32,6 +33,7 @@ public class NFCFragment implements NFCContract {
     private static final String ON_ERROR_RE_WRITE = "showErrorReWrite";
     private static final String ON_ERROR_FORMAT = "showErrorFormat";
     private static final String ON_ERROR_DEBIT_NFC = "showErrorDebitNfc";
+    private static final String ON_ERROR_REFUND_NFC = "showErrorRefundNfc";
 
     private static final String ON_READ_CARD = "onReadCard";
     private static final String ON_WRITE_CARD = "onWriteCard";
@@ -73,6 +75,11 @@ public class NFCFragment implements NFCContract {
         this.channel.invokeMethod(ON_SUCCESS_DEBIT_NFC, result);
     }
 
+    @Override
+    public void showSuccessRefundNfc(Object result) {
+        this.channel.invokeMethod(ON_SUCCESS_REFUND_NFC, result);
+    }
+
     //Error methods
     @Override
     public void showErrorRead(String message) {
@@ -88,6 +95,11 @@ public class NFCFragment implements NFCContract {
     @Override
     public void showErrorReWrite(String message) {
         this.channel.invokeMethod(ON_ERROR_RE_WRITE, message);
+    }
+
+    @Override
+    public void showErrorRefundNfc(String message) {
+        this.channel.invokeMethod(ON_ERROR_REFUND_NFC, message);
     }
 
     @Override
