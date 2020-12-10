@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:pagseguro_smart_flutter/payments/handler/nfc_handler.dart';
 import 'package:pagseguro_smart_flutter/payments/handler/payment_handler.dart';
 import 'package:pagseguro_smart_flutter/payments/payment.dart';
+import 'package:pagseguro_smart_flutter/payments/nfc.dart';
 
 class PagseguroSmart {
   final MethodChannel _channel;
