@@ -1,6 +1,7 @@
 library pagseguro_smart_flutter;
 
 import 'package:flutter/services.dart';
+import 'package:pagseguro_smart_flutter/payments/handler/nfc_handler.dart';
 import 'package:pagseguro_smart_flutter/payments/handler/payment_handler.dart';
 import 'package:pagseguro_smart_flutter/payments/payment.dart';
 
@@ -21,6 +22,10 @@ class PagseguroSmart {
 
   void initPayment(PaymentHandler handler) {
     _payment = Payment(channel: _channel, paymentHandler: handler);
+  }
+
+  void initNfc(NfcHandler handler) {
+    _payment = Nfc(channel: _channel, paymentHandler: handler);
   }
 
   Payment get payment {
