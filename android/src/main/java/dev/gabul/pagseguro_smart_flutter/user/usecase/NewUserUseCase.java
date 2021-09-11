@@ -33,9 +33,7 @@ public class NewUserUseCase {
                 writeTagInNfcCard(userData),
                 writeCellPhoneInNfcCard(userData),
                 writeCardEventIdInNfcCard(userData),
-                writeOpenValueInNfcCard(userData)
-
-        );
+                writeOpenValueInNfcCard(userData));
 
         return Observable.concat(observableSources);
     }

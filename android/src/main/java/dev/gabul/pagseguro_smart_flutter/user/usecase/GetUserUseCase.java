@@ -32,7 +32,8 @@ public class GetUserUseCase {
                // readCpfFromNfc(),
                 readTagFromNfc(),
                // readCellPhoneFromNfc(),
-                readCardActiveFromNfc()
+                readCardActiveFromNfc(),
+                readOpenValueFromNfc()
 
         );
         return Observable.concat(observableSources).collect(UserData::new, (user, value) -> {
@@ -47,9 +48,15 @@ public class GetUserUseCase {
         });
     }
 
-    private Observable<Pair<UserFieldEnum, String>> readValueFromNfc(){
+    private Observable<Pair<UserFieldEnum, String>> readValueFromNfc() {
         return mNFCUseCase.readNfc(NFCConstants.VALUE_BLOCK, null).map(
                 result -> new Pair<>(UserFieldEnum.VALUE, getStringFromResult(result))
+        );
+    }
+
+    private Observable<Pair<UserFieldEnum, String>> readOpenValueFromNfc() {
+        return mNFCUseCase.readNfc(NFCConstants.OPEN_VALUE_CARD_BLOCK, null).map(
+                result -> new Pair<>(UserFieldEnum.OPEN_VALUE, getStringFromResult(result))
         );
     }
 

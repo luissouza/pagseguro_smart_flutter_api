@@ -258,7 +258,8 @@ public class NFCPresenter  {
                 NFCConstants.TAG_BLOCK,
                 NFCConstants.CELL_PHONE_BLOCK,
                 NFCConstants.CARD_OPENED_BLOCK,
-                NFCConstants.EVENT_ID_BLOCK
+                NFCConstants.EVENT_ID_BLOCK,
+                NFCConstants.OPEN_VALUE_CARD_BLOCK
         );
 
 
