@@ -70,7 +70,7 @@ public class NewUserUseCase {
     }
 
     private Observable<Integer> writeOpenValueInNfcCard(UserData userData){
-        return mNfcUseCase.writeNfc(buildCardData(NFCConstants.OPEN_VALUE_CARD_BLOCK, userData.getOpenValue()));
+        return mNfcUseCase.writeNfc(buildCardData(NFCConstants.OPEN_VALUE_CARD_BLOCK, userData.getValue()));
     }
 
 
