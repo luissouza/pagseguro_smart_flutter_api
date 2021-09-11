@@ -13,13 +13,14 @@ public class UserData implements Serializable {
     private String cellPhone;
     private String active;
     private String idEvento;
+    private String openValue;
 
 
 
     public UserData() {
     }
 
-    public UserData(String value, String name, String cpf, String numberTag, String cellPhone, String active, String idEvento) {
+    public UserData(String value, String name, String cpf, String numberTag, String cellPhone, String active, String idEvento, String openValue) {
 
         this.value = value;
         this.name = name;
@@ -28,6 +29,7 @@ public class UserData implements Serializable {
         this.cellPhone = cellPhone;
         this.active = active;
         this.idEvento = idEvento;
+        this.openValue = openValue;
 
     }
 
@@ -88,6 +90,14 @@ public class UserData implements Serializable {
         this.idEvento = idEvento;
     }
 
+    public String getOpenValue() {
+        return openValue;
+    }
+
+    public void setOpenValue(String openValue) {
+        this.openValue = openValue;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -99,13 +109,14 @@ public class UserData implements Serializable {
                 Objects.equals(getNumberTag(), nfcData.getNumberTag()) &&
                 Objects.equals(getCellPhone(), nfcData.getCellPhone()) &&
                 Objects.equals(getActive(), nfcData.getActive()) &&
-                Objects.equals(getIdEvento(), nfcData.getIdEvento());
+                Objects.equals(getIdEvento(), nfcData.getIdEvento()) &&
+                Objects.equals(getOpenValue(), nfcData.getOpenValue());
 
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getValue(), getName(), getCpf(), getNumberTag(), getCellPhone(), getActive(), getIdEvento());
+        return Objects.hash(getValue(), getName(), getCpf(), getNumberTag(), getCellPhone(), getActive(), getIdEvento(), getOpenValue());
     }
 
     @Override
@@ -118,6 +129,7 @@ public class UserData implements Serializable {
                 ", cellPhone='" + cellPhone + '\'' +
                 ", active='" + active + '\'' +
                 ", idEvento='" + idEvento + '\'' +
+                ", openValue='" + openValue + '\'' +
                 '}';
     }
 }

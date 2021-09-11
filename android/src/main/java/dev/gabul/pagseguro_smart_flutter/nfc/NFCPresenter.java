@@ -1,12 +1,11 @@
 package dev.gabul.pagseguro_smart_flutter.nfc;
+
 import android.util.Log;
 
 import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
-import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPag;
-
 
 import br.com.uol.pagseguro.plugpagservice.wrapper.data.request.PlugPagLedData;
 import dev.gabul.pagseguro_smart_flutter.helpers.NFCConstants;
@@ -14,7 +13,6 @@ import dev.gabul.pagseguro_smart_flutter.helpers.Utils;
 import dev.gabul.pagseguro_smart_flutter.managers.UserDataManager;
 import dev.gabul.pagseguro_smart_flutter.nfc.usecase.NFCUseCase;
 import dev.gabul.pagseguro_smart_flutter.user.UserData;
-import io.flutter.plugin.common.MethodChannel;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -75,7 +73,7 @@ public class NFCPresenter  {
 
     public void writeNFCCard(String value, String name, String cpf, String numberTag, String cellPhone, String active, String idEvento) {
 
-        UserData userData = new UserData(Utils.adicionaAsterisco(value), Utils.adicionaAsterisco(name), Utils.adicionaAsterisco(cpf), Utils.adicionaAsterisco(numberTag), Utils.adicionaAsterisco(cellPhone), Utils.adicionaAsterisco(active), Utils.adicionaAsterisco(idEvento));
+        UserData userData = new UserData(Utils.adicionaAsterisco(value), Utils.adicionaAsterisco(name), Utils.adicionaAsterisco(cpf), Utils.adicionaAsterisco(numberTag), Utils.adicionaAsterisco(cellPhone), Utils.adicionaAsterisco(active), Utils.adicionaAsterisco(idEvento), Utils.adicionaAsterisco(value));
 
         mSubscribe = mUseCase.controlLed(new PlugPagLedData(PlugPagLedData.LED_BLUE))
                 .subscribeOn(Schedulers.io())
@@ -161,7 +159,7 @@ public class NFCPresenter  {
 
     public void reFundNFCCard(String value, String idEvento) {
 
-        UserData userData = new UserData(Utils.adicionaAsterisco(value), null, null, null, null, null, Utils.adicionaAsterisco(idEvento));
+        UserData userData = new UserData(Utils.adicionaAsterisco(value), null, null, null, null, null, Utils.adicionaAsterisco(idEvento), null);
 
         mSubscribe = mUseCase.controlLed(new PlugPagLedData(PlugPagLedData.LED_BLUE))
                 .subscribeOn(Schedulers.io())
@@ -174,7 +172,7 @@ public class NFCPresenter  {
 
     public void reWriteNFCCard(String value, String idEvento) {
 
-        UserData userData = new UserData(Utils.adicionaAsterisco(value), null, null, null, null, null, Utils.adicionaAsterisco(idEvento));
+        UserData userData = new UserData(Utils.adicionaAsterisco(value), null, null, null, null, null, Utils.adicionaAsterisco(idEvento), null);
 
         mSubscribe = mUseCase.controlLed(new PlugPagLedData(PlugPagLedData.LED_BLUE))
                 .subscribeOn(Schedulers.io())
@@ -223,7 +221,7 @@ public class NFCPresenter  {
 
     public void debitNFCCard(String idEvento, String value) {
 
-        UserData userData = new UserData(Utils.adicionaAsterisco(value), null, null, null, null, null, Utils.adicionaAsterisco(idEvento));
+        UserData userData = new UserData(Utils.adicionaAsterisco(value), null, null, null, null, null, Utils.adicionaAsterisco(idEvento), null);
 
         mSubscribe = mUseCase.controlLed(new PlugPagLedData(PlugPagLedData.LED_BLUE))
                 .subscribeOn(Schedulers.io())

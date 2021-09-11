@@ -2,12 +2,10 @@ package dev.gabul.pagseguro_smart_flutter.nfc;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPagNFCResult;
-
+import io.flutter.plugin.common.MethodChannel;
 import dev.gabul.pagseguro_smart_flutter.helpers.Utils;
 import dev.gabul.pagseguro_smart_flutter.user.UserData;
-import io.flutter.plugin.common.MethodChannel;
+
 
 public class NFCFragment implements NFCContract {
 

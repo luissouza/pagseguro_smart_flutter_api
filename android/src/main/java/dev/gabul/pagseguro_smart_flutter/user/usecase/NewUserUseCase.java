@@ -4,16 +4,15 @@ import android.nfc.tech.MifareClassic;
 
 import androidx.annotation.NonNull;
 
-import dev.gabul.pagseguro_smart_flutter.helpers.NFCConstants;
-import dev.gabul.pagseguro_smart_flutter.nfc.usecase.NFCUseCase;
-import dev.gabul.pagseguro_smart_flutter.user.UserData;
-import dev.gabul.pagseguro_smart_flutter.helpers.Utils;
-
 import java.util.Arrays;
 import java.util.List;
 
 import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPagNearFieldCardData;
 import br.com.uol.pagseguro.plugpagservice.wrapper.data.request.PlugPagSimpleNFCData;
+import dev.gabul.pagseguro_smart_flutter.helpers.NFCConstants;
+import dev.gabul.pagseguro_smart_flutter.helpers.Utils;
+import dev.gabul.pagseguro_smart_flutter.nfc.usecase.NFCUseCase;
+import dev.gabul.pagseguro_smart_flutter.user.UserData;
 import io.reactivex.Observable;
 
 public class NewUserUseCase {
@@ -33,7 +32,8 @@ public class NewUserUseCase {
                 writeCpfInNfcCard(userData),
                 writeTagInNfcCard(userData),
                 writeCellPhoneInNfcCard(userData),
-                writeCardEventIdInNfcCard(userData)
+                writeCardEventIdInNfcCard(userData),
+                writeOpenValueInNfcCard(userData)
 
         );
 
@@ -67,6 +67,10 @@ public class NewUserUseCase {
 
     private Observable<Integer> writeCardEventIdInNfcCard(UserData userData){
         return mNfcUseCase.writeNfc(buildCardData(NFCConstants.EVENT_ID_BLOCK, userData.getActive()));
+    }
+
+    private Observable<Integer> writeOpenValueInNfcCard(UserData userData){
+        return mNfcUseCase.writeNfc(buildCardData(NFCConstants.OPEN_VALUE_CARD_BLOCK, userData.getOpenValue()));
     }
 
 
