@@ -49,6 +49,7 @@ public class NFCFragment implements NFCContract {
         results.add(Utils.removeAsterisco(result.getNumberTag()));
         results.add(Utils.removeAsterisco(result.getCellPhone()));
         results.add(Utils.removeAsterisco(result.getActive()));
+        results.add(Utils.removeAsterisco(result.getOpenValue()));
 
         this.channel.invokeMethod(ON_SUCCESS, results);
     }
