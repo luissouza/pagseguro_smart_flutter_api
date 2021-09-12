@@ -155,7 +155,7 @@ public class NFCUseCase {
 
 
                 Integer resultWrite = 1;
-                if(NFCConstants.VALUE_BLOCK == cardData.getSlot()) {
+                if(NFCConstants.VALUE_BLOCK == cardData.getSlot() || NFCConstants.OPEN_VALUE_CARD_BLOCK == cardData.getSlot()) {
 
                     //Soma valor atual com o valor de recarga
                     Double valorAtual = Double.parseDouble(Utils.removeAsterisco(new String(resultRead.getSlots()[cardData.getSlot()].get("data"))));
