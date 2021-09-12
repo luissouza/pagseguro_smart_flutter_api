@@ -14,6 +14,8 @@ public class NFCConstants {
     //SECTOR 2
     public static final int CARD_OPENED_BLOCK = 8;
     public static final int EVENT_ID_BLOCK = 9;
-    public static final int OPEN_VALUE_CARD_BLOCK = 10;
+  
+    //SECTOR 3
+    public static final int OPEN_VALUE_CARD_BLOCK = 11;
 
 }
