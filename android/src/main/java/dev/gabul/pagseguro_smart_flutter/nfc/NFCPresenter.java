@@ -172,7 +172,7 @@ public class NFCPresenter  {
 
     public void reWriteNFCCard(String value, String idEvento) {
 
-        UserData userData = new UserData(Utils.adicionaAsterisco(value), null, null, null, null, null, Utils.adicionaAsterisco(idEvento), null);
+        UserData userData = new UserData(Utils.adicionaAsterisco(value), null, null, null, null, null, Utils.adicionaAsterisco(idEvento), Utils.adicionaAsterisco(value));
 
         mSubscribe = mUseCase.controlLed(new PlugPagLedData(PlugPagLedData.LED_BLUE))
                 .subscribeOn(Schedulers.io())
