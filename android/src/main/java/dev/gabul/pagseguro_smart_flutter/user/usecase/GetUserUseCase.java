@@ -44,6 +44,7 @@ public class GetUserUseCase {
                 case TAG: user.setNumberTag(value.second); break;
                 case CELL_PHONE: user.setCellPhone(value.second); break;
                 case CARD_OPENED: user.setActive(value.second); break;
+                case OPEN_VALUE: user.setOpenValue(value.second); break;
             }
         });
     }
