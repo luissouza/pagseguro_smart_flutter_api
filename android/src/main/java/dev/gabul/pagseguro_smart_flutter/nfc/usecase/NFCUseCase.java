@@ -123,11 +123,16 @@ public class NFCUseCase {
 
                 PlugPagSimpleNFCData readCardData = new PlugPagSimpleNFCData(PlugPagNearFieldCardData.ONLY_M, cardData.getSlot(), MifareClassic.KEY_DEFAULT);
                 PlugPagNFCResult resultRead = mPlugPag.readNFCCardDirectly(readCardData);
+                
 
+                PlugPagSimpleNFCData readCardDataTag = new PlugPagSimpleNFCData(PlugPagNearFieldCardData.ONLY_M, NFCConstants.TAG_BLOCK, MifareClassic.KEY_DEFAULT);
+                PlugPagNFCResult resultReadTag = mPlugPag.readNFCCardDirectly(readCardDataTag);
+
+               
                 String resultReadstring = "";
 
                 if(cardData.getSlot() == NFCConstants.TAG_BLOCK) {
-                    resultReadstring = Utils.removeAsterisco(new String(resultRead.getSlots()[cardData.getSlot()].get("data")));
+                    resultReadstring = Utils.removeAsterisco(new String(resultReadTag.getSlots()[cardData.getSlot()].get("data")));
                 }
 
                 System.out.println("resultReadstring");
