@@ -124,7 +124,7 @@ public class NFCUseCase {
                 PlugPagSimpleNFCData readCardData = new PlugPagSimpleNFCData(PlugPagNearFieldCardData.ONLY_M, cardData.getSlot(), MifareClassic.KEY_DEFAULT);
                 PlugPagNFCResult resultRead = mPlugPag.readNFCCardDirectly(readCardData);
 
-                String resultReadstring = ""
+                String resultReadstring = "";
 
                 if(cardData.getSlot() == NFCConstants.TAG_BLOCK) {
                     resultReadstring = Utils.removeAsterisco(new String(resultRead.getSlots()[cardData.getSlot()].get("data")));
