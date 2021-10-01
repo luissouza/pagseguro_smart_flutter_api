@@ -101,10 +101,10 @@ public class NFCUseCase {
     public Observable<String> reWriteNfc(PlugPagSimpleNFCData cardData) {
         return Observable.create(emitter -> {
 
-
             try {
 
                 int resultStartNfc = mPlugPag.startNFCCardDirectly();
+
                 if (resultStartNfc != 1) {
                     emitter.onError(new PlugPagException("Ocorreu um erro ao iniciar serviço nfc"));
                     emitter.onComplete();
@@ -129,6 +129,9 @@ public class NFCUseCase {
                 if(cardData.getSlot() == NFCConstants.TAG_BLOCK) {
                     resultReadstring = Utils.removeAsterisco(new String(resultRead.getSlots()[cardData.getSlot()].get("data")));
                 }
+
+                System.out.println("resultReadstring");
+                System.out.println(resultReadstring);
 
                 if (resultRead.getResult() == 1) {
 

@@ -30,7 +30,7 @@ public class EditUserUseCase {
                 reWriteValueInNfcCard(userData),
 //                writeNameInNfcCard(userData),
 //                writeCpfInNfcCard(userData),
-                reWriteTagInNfcCard(userData),
+                //reWriteTagInNfcCard(userData),
                 reWriteOpenValueInNfcCard(userData)
 //                writeCellPhoneInNfcCard(userData),
 //                writeCardActiveInNfcCard(userData)
