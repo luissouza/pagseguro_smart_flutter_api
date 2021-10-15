@@ -11,6 +11,11 @@ class Payment {
 
   Payment ({@required this.channel, @required this.paymentHandler}) {
     channel.setMethodCallHandler(_callHandler);
+    
+  }
+
+  Future<void> closeMethodCallHandler() async {
+    return channel.setMethodCallHandler(null);
   }
 
   Future<bool> creditPayment(int value) async {
