@@ -13,6 +13,10 @@ class Nfc {
     channel.setMethodCallHandler(_callHandler);
   }
 
+  Future<void> closeMethodCallHandler() async {
+    return channel.setMethodCallHandler(null);
+  }
+  
   Future<bool> creditPayment(int value) async {
     return channel.invokeMethod(PaymentTypeCall.CREDIT.method, {"value": value});
   }
