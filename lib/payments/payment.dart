@@ -34,6 +34,10 @@ class Payment {
     return channel.invokeMethod(PaymentTypeCall.VOUCHER.method, {"value": value});
   }
 
+  Future<bool> pixPayment(int value) async {
+    return channel.invokeMethod(PaymentTypeCall.PIX.method, {"value": value});
+  }
+
   //OPERATIONS
   Future<bool> abortTransaction() async {
     return channel.invokeMethod(PaymentTypeCall.ABORT.method);

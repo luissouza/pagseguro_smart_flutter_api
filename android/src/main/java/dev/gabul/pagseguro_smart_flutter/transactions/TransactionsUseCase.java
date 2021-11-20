@@ -12,7 +12,6 @@ import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPagPrinterListener;
 import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPagTransactionResult;
 import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPagVoidData;
 import br.com.uol.pagseguro.plugpagservice.wrapper.exception.PlugPagException;
-
 import dev.gabul.pagseguro_smart_flutter.core.ActionResult;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -25,6 +24,7 @@ public class TransactionsUseCase {
     private final int TYPE_CREDITO = 1;
     private final int TYPE_DEBITO = 2;
     private final int TYPE_VOUCHER = 3;
+    private final int TYPE_PIX = 4;
 
     private final int INSTALLMENT_TYPE_A_VISTA = 1;
     private final int INSTALLMENT_TYPE_PARC_VENDEDOR = 2;
@@ -37,6 +37,17 @@ public class TransactionsUseCase {
     public Observable<ActionResult> doCreditPayment() {
         return doPayment(new PlugPagPaymentData(
                 TYPE_CREDITO,
+                getAmount(),
+                INSTALLMENT_TYPE_A_VISTA,
+                1,
+                USER_REFERENCE,
+                true
+        ));
+    }
+
+    public Observable<ActionResult> doPixPayment() {
+        return doPayment(new PlugPagPaymentData(
+                TYPE_PIX,
                 getAmount(),
                 INSTALLMENT_TYPE_A_VISTA,
                 1,

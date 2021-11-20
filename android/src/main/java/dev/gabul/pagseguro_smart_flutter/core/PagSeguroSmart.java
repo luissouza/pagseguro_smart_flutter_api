@@ -34,6 +34,7 @@ public class PagSeguroSmart {
     private static final String PAYMENT_CREDIT = "paymentCredit";
     private static final String PAYMENT_CREDIT_PARC = "paymentCreditParc";
     private static final String PAYMENT_VOUCHER = "paymentVoucher";
+    private static final String PAYMENT_PIX = "paymentPix";
     private static final String PAYMENT_ABORT = "paymentAbort";
     private static final String LAST_TRANSACTION = "paymentLastTransaction";
     private static final String REFUND = "paymentRefund";
@@ -90,6 +91,10 @@ public class PagSeguroSmart {
         }
         else if(call.method.equals(PAYMENT_VOUCHER)) {
             this.payment.doVoucherPayment(call.argument("value"));
+
+        }
+        else if(call.method.equals(PAYMENT_PIX)) {
+            this.payment.pixPayment(call.argument("value"));
 
         }
         else if(call.method.equals(PAYMENT_ABORT)) {

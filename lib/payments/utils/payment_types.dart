@@ -132,6 +132,7 @@ enum PaymentTypeCall {
   CREDIT,
   CREDIT_PARC,
   DEBIT,
+  PIX,
   VOUCHER,
   ABORT,
   LAST_TRANSACTION,
@@ -166,6 +167,8 @@ extension PaymentTypeCallExt on PaymentTypeCall {
         return "paymentCreditParc";
       case PaymentTypeCall.DEBIT:
         return "paymentDebit";
+      case PaymentTypeCall.PIX:
+        return "paymentPix";
       case PaymentTypeCall.VOUCHER:
         return "paymentVoucher";
       case PaymentTypeCall.ABORT:

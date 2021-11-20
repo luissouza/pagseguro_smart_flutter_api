@@ -1,8 +1,6 @@
 package dev.gabul.pagseguro_smart_flutter.payments;
 
 
-
-
 import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPag;
 import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPagActivationData;
 import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPagInitializationResult;
@@ -10,7 +8,6 @@ import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPagPaymentData;
 import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPagTransactionResult;
 import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPagVoidData;
 import br.com.uol.pagseguro.plugpagservice.wrapper.exception.PlugPagException;
-
 import dev.gabul.pagseguro_smart_flutter.core.ActionResult;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -24,6 +21,7 @@ public class PaymentsUseCase {
     private final int TYPE_CREDITO = 1;
     private final int TYPE_DEBITO = 2;
     private final int TYPE_VOUCHER = 3;
+    private final int TYPE_PIX = 4;
 
     private final int INSTALLMENT_TYPE_A_VISTA = 1;
     private final int INSTALLMENT_TYPE_PARC_VENDEDOR = 2;
@@ -73,6 +71,17 @@ public class PaymentsUseCase {
                 1,
                 USER_REFERENCE,
                 true));
+    }
+
+    public Observable<ActionResult> doPixPayment(int value) {
+        return doPayment(new PlugPagPaymentData(
+                TYPE_PIX,
+                value,
+                INSTALLMENT_TYPE_A_VISTA,
+                1,
+                USER_REFERENCE,
+                true
+        ));
     }
 
     private Observable<ActionResult> doPayment(final PlugPagPaymentData paymentData) {

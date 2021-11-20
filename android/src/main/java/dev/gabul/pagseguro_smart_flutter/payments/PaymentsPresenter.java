@@ -4,7 +4,6 @@ import javax.inject.Inject;
 
 import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPag;
 import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPagEventData;
-
 import dev.gabul.pagseguro_smart_flutter.core.ActionResult;
 import io.flutter.plugin.common.MethodChannel;
 import io.reactivex.Observable;
@@ -34,6 +33,10 @@ public class PaymentsPresenter  {
         doAction(mUseCase.doCreditPayment(value), value);
     }
 
+    public void pixPayment(int value) {
+        doAction(mUseCase.doPixPayment(value), value);
+    }
+
     public void doDebitPayment(int value) {
         doAction(mUseCase.doDebitPayment(value), value);
     }
@@ -41,6 +44,7 @@ public class PaymentsPresenter  {
     public void doVoucherPayment(int value) {
         doAction(mUseCase.doVoucherPayment(value), value);
     }
+
 
 
     public void doRefund(String transactionCode, String transactionId) {

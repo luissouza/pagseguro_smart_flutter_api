@@ -3,12 +3,10 @@ package dev.gabul.pagseguro_smart_flutter.transactions;
 import javax.inject.Inject;
 
 import br.com.uol.pagseguro.plugpagservice.wrapper.PlugPagEventData;
-
 import dev.gabul.pagseguro_smart_flutter.core.ActionResult;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-
 import io.reactivex.schedulers.Schedulers;
 
 public class TransactionsPresenter {
@@ -27,6 +25,10 @@ public class TransactionsPresenter {
 
     public void creditPayment() {
         doAction(mUseCase.doCreditPayment());
+    }
+
+    public void pixPayment() {
+        doAction(mUseCase.doPixPayment());
     }
 
     public void doCreditPaymentWithSellerInstallments() {
