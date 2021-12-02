@@ -17,6 +17,7 @@ public class PaymentsFragment implements PaymentsContract  {
     private static final String ON_TRANSACTION_SUCCESS = "onTransactionSuccess";
     private static final String ON_ERROR = "onError";
     private static final String ON_MESSAGE = "onMessage";
+    private static final String ON_MESSAGE_CODE = "onMessageCode";
     private static final String ON_LOADING = "onLoading";
     private static final String WRITE_TO_FILE = "writeToFile";
     private static final String ON_ABORTED_SUCCESSFULLY = "onAbortedSuccessfully";
@@ -43,6 +44,17 @@ public class PaymentsFragment implements PaymentsContract  {
     @Override
     public void onMessage(String message) {
         this.channel.invokeMethod(ON_MESSAGE,message);
+
+    }
+
+    @Override
+    public void onMessageCode(Integer result, String message, Integer code, String errorCode) {
+        Map<String,String> map = new HashMap<String, String>();
+        map.put("result", result.toString();
+        map.put("message", message);
+        map.put("eventCode", code.toString());
+        map.put("errorCode", errorCode);
+        this.channel.invokeMethod(ON_MESSAGE_CODE, map);
 
     }
 

@@ -70,11 +70,15 @@ public class PaymentsPresenter  {
 
                             if (result.getEventCode() == PlugPagEventData.EVENT_CODE_NO_PASSWORD ||
                                     result.getEventCode() == PlugPagEventData.EVENT_CODE_DIGIT_PASSWORD) {
-                                mFragment.onMessage(checkMessagePassword(result.getEventCode(), value));
+
+                                //mFragment.onMessage(checkMessagePassword(result.getEventCode(), value));
+                                mFragment.onMessageCode(result.getResult(), checkMessagePassword(result.getEventCode(), value), result.getEventCode(), result.getErrorCode());
+
+
                             } else if (result.getErrorCode() != null) {
                                 mFragment.onError(result.getErrorCode());
                             } else {
-                                mFragment.onMessage(checkMessage(result.getMessage()));
+                                mFragment.onMessageCode(result.getResult(), checkMessage(result.getMessage()), result.getEventCode(), result.getErrorCode());
                             }
                         },
                         throwable -> {

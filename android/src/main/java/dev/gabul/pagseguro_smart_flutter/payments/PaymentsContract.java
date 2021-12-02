@@ -8,6 +8,8 @@ interface PaymentsContract {
 
     void onMessage(String message);
 
+    void onMessageCode(Integer result, String message, Integer code, String errorCode);
+
     void onLoading(boolean show);
 
     void writeToFile(String transactionCode, String transactionId);
