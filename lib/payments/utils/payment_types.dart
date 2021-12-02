@@ -2,6 +2,7 @@ enum PaymentTypeHandler {
   ON_TRANSACTION_SUCCESS,
   ON_ERROR,
   ON_MESSAGE,
+  ON_MESSAGE_CODE,
   ON_LOADING,
   WRITE_TO_FILE,
   ON_ABORTED_SUCCESSFULLY,
@@ -33,6 +34,8 @@ extension StringPaymentHandlerExt on String {
         return PaymentTypeHandler.ON_ERROR;
       case "onMessage":
         return PaymentTypeHandler.ON_MESSAGE;
+      case "onMessageCode":
+        return PaymentTypeHandler.ON_MESSAGE_CODE;
       case "onLoading":
         return PaymentTypeHandler.ON_LOADING;
       case "writeToFile":
@@ -86,6 +89,8 @@ extension PaymentTypeHandlerExt on PaymentTypeHandler {
         return "onError";
       case PaymentTypeHandler.ON_MESSAGE:
         return "onMessage";
+      case PaymentTypeHandler.ON_MESSAGE_CODE:
+        return "onMessageCode";
       case PaymentTypeHandler.ON_LOADING:
         return "onLoading";
       case PaymentTypeHandler.WRITE_TO_FILE:

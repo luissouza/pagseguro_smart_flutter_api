@@ -92,6 +92,11 @@ class Payment {
           paymentHandler.onMessage(call.arguments);
         }
         break;
+      case PaymentTypeHandler.ON_MESSAGE_CODE:
+        {
+          paymentHandler.onMessageCode(call.arguments);
+        }
+        break;
       case PaymentTypeHandler.ON_LOADING:
         {
           paymentHandler.onLoading(call.arguments);
