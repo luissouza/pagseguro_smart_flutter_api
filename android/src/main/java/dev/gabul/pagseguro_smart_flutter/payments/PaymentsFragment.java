@@ -48,12 +48,10 @@ public class PaymentsFragment implements PaymentsContract  {
     }
 
     @Override
-    public void onMessageCode(Integer result, String message, Integer code, String errorCode) {
+    public void onMessageCode(String message, Integer eventCode) {
         Map<String,String> map = new HashMap<String, String>();
-        map.put("result", result.toString());
         map.put("message", message);
-        map.put("eventCode", code.toString());
-        map.put("errorCode", errorCode);
+        map.put("eventCode", eventCode.toString());
         this.channel.invokeMethod(ON_MESSAGE_CODE, map);
 
     }

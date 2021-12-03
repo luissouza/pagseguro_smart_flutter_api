@@ -8,7 +8,7 @@ interface PaymentsContract {
 
     void onMessage(String message);
 
-    void onMessageCode(Integer result, String message, Integer code, String errorCode);
+    void onMessageCode(String message, Integer eventCode);
 
     void onLoading(boolean show);
 
