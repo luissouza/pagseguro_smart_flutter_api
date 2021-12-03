@@ -5,7 +5,7 @@ abstract class PaymentHandler {
   void onError(String message);
 
   void onMessage(String message);
-  void onMessageCode(List<dynamic> result);
+  void onMessageCode({String message, String eventCode});
 
   void showSuccess(List<dynamic> result);
   void showSuccessWrite(int result);
