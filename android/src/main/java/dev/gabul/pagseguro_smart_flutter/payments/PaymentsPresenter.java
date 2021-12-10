@@ -69,20 +69,16 @@ public class PaymentsPresenter  {
                             writeToFile(result);
 
                             if (result.getEventCode() == PlugPagEventData.EVENT_CODE_NO_PASSWORD || result.getEventCode() == PlugPagEventData.EVENT_CODE_DIGIT_PASSWORD) {
-
-                                mFragment.onMessage(checkMessagePassword(result.getEventCode(), value));
                                 mFragment.onMessageCode(checkMessagePassword(result.getEventCode(), value), result.getEventCode());
-
 
                             } else if (result.getErrorCode() != null) {
                                 mFragment.onError(result.getErrorCode());
                             } else {
-                                mFragment.onMessage(checkMessage(result.getMessage()));
                                 mFragment.onMessageCode(checkMessage(result.getMessage()), result.getEventCode());
                             }
                         },
                         throwable -> {
-                            mFragment.onMessage(throwable.getMessage());
+                            mFragment.onMessageCode(throwable.getMessage(), null);
                             mFragment.disposeDialog();
                         });
     }
