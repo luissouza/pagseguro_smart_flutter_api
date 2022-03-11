@@ -51,7 +51,7 @@ public class PaymentsFragment implements PaymentsContract  {
     public void onMessageCode(String message, Integer eventCode) {
         Map<String,String> map = new HashMap<String, String>();
         map.put("message", message);
-        map.put("eventCode", eventCode.toString());
+        map.put("eventCode", eventCode != null ? eventCode.toString() : "");
         this.channel.invokeMethod(ON_MESSAGE_CODE, map);
 
     }
