@@ -15,13 +15,13 @@ import io.reactivex.ObservableEmitter;
 
 public class PaymentsUseCase {
 
-    public static final String USER_REFERENCE = "MOBTICKETS";
+    public static final String USER_REFERENCE = "1";
     private final PlugPag mPlugPag;
 
     private final int TYPE_CREDITO = 1;
     private final int TYPE_DEBITO = 2;
     private final int TYPE_VOUCHER = 3;
-    private final int TYPE_PIX = 4;
+    private final int TYPE_PIX = 5;
 
     private final int INSTALLMENT_TYPE_A_VISTA = 1;
     private final int INSTALLMENT_TYPE_PARC_VENDEDOR = 2;

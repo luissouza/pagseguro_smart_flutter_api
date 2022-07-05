@@ -18,7 +18,7 @@ import io.reactivex.ObservableEmitter;
 
 public class TransactionsUseCase {
 
-    public static final String USER_REFERENCE = "MOBTICKETS";
+    public static final String USER_REFERENCE = "1";
     private final PlugPag mPlugPag;
     private PlugPagPaymentData mPlugPagPaymentData = null;
     private final int TYPE_CREDITO = 1;
