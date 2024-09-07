@@ -1,20 +1,26 @@
 # pagseguro_smart_flutter
 
-A new Flutter plugin.
+API developed in Flutter/Android with the aim of integrating mobile applications with the PagSeguro acquirer's credit card machine, specifically on the A930 machine
+
+<h1 align="center">
+  <br>
+   <img width="1000" src="https://files.readme.io/82e8e19-gallery-right-2x2.png" />
+  <br>
+</h1>
 
 ## Android Manifest
 
-Para integrar a biblioteca a biblioteca PlugPagService em aplicativos para Android é
-necessário adicionar a seguinte permissão ao AndroidManifest.xml.
+To integrate the library, the PlugPagService library in Android applications is
+You need to add the following permission to AndroidManifest.xml.
 
 ```xml
 <permission android:name="br.com.uol.pagseguro.permission.MANAGE_PAYMENTS"/>
 ```
 
 ## Intent-filter
-Para que seu aplicativo possa ser escolhido como aplicativo padrão de pagamento e receber
-Intents de inserção de cartão, é necessário adicionar o seguinte código em seu
-AndroidManifest.xml dentro da sua Activity principal.
+So that your app can be chosen as the default pay and receive app
+Card insertion intents, you need to add the following code in your
+AndroidManifest.xml inside your main Activity.
 
 ```xml
 <intent-filter>
