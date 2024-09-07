@@ -4,7 +4,7 @@ API developed in Flutter/Android with the aim of integrating mobile applications
 
 <h1 align="center">
   <br>
-   <img width="1000" src="https://files.readme.io/82e8e19-gallery-right-2x2.png" />
+   <img width="700" src="https://files.readme.io/82e8e19-gallery-right-2x2.png" />
   <br>
 </h1>
 
