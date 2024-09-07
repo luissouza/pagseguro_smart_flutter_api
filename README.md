@@ -1,4 +1,4 @@
-# pagseguro_smart_flutter
+# pagseguro_smart_flutter_api - flutter/android plugin
 
 API developed in Flutter/Android with the aim of integrating mobile applications with the PagSeguro acquirer's credit card machine, specifically on the A930 machine
 
